@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор чат-ботів</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--tg-theme-bg-color, #ffffff); color: var(--tg-theme-text-color, #000000); padding: 16px; min-height: 100vh; }
+    h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: var(--tg-theme-hint-color, #888); margin-bottom: 20px; }
+    .section-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--tg-theme-hint-color, #888); margin-bottom: 10px; margin-top: 20px; }
+    .service-card { background: var(--tg-theme-secondary-bg-color, #f4f4f4); border: 2px solid transparent; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
+    .service-card.selected { border-color: #1D9E75; background: #E1F5EE; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    .service-card.selected .card-title, .service-card.selected .card-desc, .service-card.selected .card-price { color: #085041; }
+    .card-price { font-size: 13px; color: var(--tg-theme-hint-color, #888); white-space: nowrap; }
+    .card-desc { font-size: 13px; color: var(--tg-theme-hint-color, #888); margin-top: 4px; }
+    .platform-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+    .platform-btn { border: 1.5px solid #ccc; background: var(--tg-theme-secondary-bg-color, #f4f4f4); border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--tg-theme-text-color, #000); }
+    .platform-btn.active { border-color: #1D9E75; color: #0F6E56; background: #E1F5EE; }
+    .extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .extra-item { display: flex; align-items: center; gap: 8px; font-size: 13px; background: var(--tg-theme-secondary-bg-color, #f4f4f4); border-radius: 8px; padding: 10px 12px; cursor: pointer; }
+    .extra-item input[type=checkbox] { width: 18px; height: 18px; accent-color: #1D9E75; cursor: pointer; flex-shrink: 0; }
+    .extra-name { font-weight: 500; }
+    .extra-price { font-size: 11px; color: var(--tg-theme-hint-color, #888); }
+    .result-box { background: #E1F5EE; border: 1.5px solid #5DCAA5; border-radius: 14px; padding: 16px 20px; margin-top: 24px; }
+    .result-label { font-size: 13px; color: #0F6E56; margin-bottom: 4px; }
+    .result-price { font-size: 34px; font-weight: 700; color: #085041; }
+    .breakdown { margin-top: 14px; border-top: 1px solid #9FE1CB; padding-top: 10px; }
+    .breakdown-row { display: flex; justify-content: space-between; font-size: 13px; color: #0F6E56; margin-bottom: 5px; }
+    .breakdown-row.total { font-weight: 700; border-top: 1px solid #9FE1CB; margin-top: 8px; padding-top: 8px; }
+    .result-note { font-size: 11px; color: #0F6E56; margin-top: 10px; opacity: 0.8; }
+    .send-btn { width: 100%; margin-top: 14px; padding: 14px; background: #1D9E75; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-
