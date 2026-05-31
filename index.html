@@ -10,11 +10,11 @@
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
   background:#ffffff;
-  background-image:radial-gradient(circle,#e0e0e0 1px,transparent 1px);
-  background-size:22px 22px;
+  background-image:radial-gradient(circle,#d0cfc8 1px,transparent 1px);
+  background-size:20px 20px;
   color:#1c1c1e;
-  padding-bottom:40px;
-  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  padding:0 0 40px;
 }
 .top-bar{background:#F5C842;padding:16px 18px 14px;position:sticky;top:0;z-index:10}
 .top-title{font-size:17px;font-weight:700;color:#1c1200;letter-spacing:-.3px}
@@ -23,16 +23,18 @@ body{
 .content{padding:18px 16px 0}
 .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8e8e93;margin:20px 0 8px;padding-left:5px}
 
-/* Картки основних типів */
+/* Картки ботів */
 .scard{background:#fff;border:1.5px solid #e5e5ea;border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;transition:all .2s ease}
 .scard.on{border-color:#F5C842;background:#FFFDF5}
-.ch{display:flex;justify-content:space-between;align-items:center}
-.ct{font-size:15px;font-weight:600;color:#1c1c1e}
-.cp{font-size:13px;color:#8e8e93;font-weight:500}
-.cd{font-size:12px;color:#8e8e93;margin-top:6px;line-height:1.4}
+.badge-hl{display:inline-block;background:#F5C842;color:#3a2c00;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ct{font-size:15px;font-weight:700;color:#1c1c1e;line-height:1.2}
+.cp{font-size:13px;color:#8e8e93;white-space:nowrap;font-weight:500}
+.cd{font-size:12px;color:#8e8e93;margin-top:5px;line-height:1.4}
+.tip{font-size:11px;color:#7a6500;background:#FFFDF5;border:1px solid #F5C842;border-radius:8px;padding:8px 10px;margin-top:8px;line-height:1.4}
 
-/* Єдиний блок додаткових послуг (Список) */
-.options-block {
+/* Єдиний блок додаткових опцій (Список) */
+.extras-list {
   background: #fff;
   border: 1.5px solid #e5e5ea;
   border-radius: 16px;
@@ -46,13 +48,12 @@ body{
   padding: 14px 16px;
   border-bottom: 1px solid #f2f2f7;
   cursor: pointer;
-  transition: background 0.15s;
 }
 .opt-row:last-child { border-bottom: none; }
 .opt-row.on { background: #FFFDF5; }
 
 /* Круглий чекбокс */
-.dot-cb {
+.round-cb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -62,25 +63,27 @@ body{
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  background: #fff;
+  flex-shrink: 0;
 }
-.opt-row.on .dot-cb {
-  border-color: #F5C842;
+.opt-row.on .round-cb {
   background: #F5C842;
+  border-color: #F5C842;
 }
-.opt-row.on .dot-cb::after {
+.opt-row.on .round-cb::after {
   content: '';
-  width: 6px;
-  height: 6px;
-  background: #1c1200;
-  border-radius: 50%;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #1c1200;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
 }
 
 .opt-info { flex-grow: 1; }
-.opt-name { font-size: 13px; font-weight: 500; color: #1c1c1e; }
-.opt-price { font-size: 11px; color: #8e8e93; margin-top: 1px; }
+.opt-name { font-size: 13px; font-weight: 600; color: #1c1c1e; }
+.opt-price { font-size: 11px; color: #8e8e93; margin-top: 2px; }
 
-/* Блок підтримки */
+/* Бонус */
 .bonus-box{background:#FFFDF5;border:1.5px solid #F5C842;border-radius:14px;padding:15px;margin-top:10px}
 .bonus-title{font-size:14px;font-weight:700;color:#1c1200}
 .bonus-desc{font-size:12px;color:#7a6500;margin-top:4px;line-height:1.5}
@@ -98,168 +101,135 @@ body{
 .res-total span { font-size: 16px; color: #8e8e93; margin-left: 5px; font-weight: 400; }
 .res-details { margin-top: 15px; border-top: 1px solid #f2f2f7; padding-top: 12px; }
 .res-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #3a3a3c; }
-.res-row.bold { font-weight: 700; border-top: 1px solid #f2f2f7; margin-top: 8px; padding-top: 8px; }
+.res-row.bold { font-weight: 800; border-top: 1px solid #f2f2f7; margin-top: 8px; padding-top: 8px; color:#1c1c1e; }
 
 /* Кнопки */
-.btn-calc {
-  display: block; width: 180px; margin: 25px auto 10px;
-  padding: 12px; background: #F5C842; color: #1c1200;
-  border: none; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer;
-}
-.btn-save {
-  display: block; width: 180px; margin: 10px auto;
-  padding: 10px; background: #1c1c1e; color: #fff;
-  border: none; border-radius: 50px; font-size: 13px; font-weight: 600; cursor: pointer;
-}
-.btn-rst {
-  display: block; margin: 10px auto; background: none; border: none;
-  color: #8e8e93; font-size: 12px; cursor: pointer; text-decoration: underline;
-}
+.calc-btn{display:block;margin:25px auto 0;padding:12px 40px;background:#F5C842;color:#1c1200;border:none;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer}
+.send-btn{display:block;margin:15px auto 0;padding:11px 32px;background:#1c1c1e;color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer}
+.rst-btn{display:block;margin:15px auto 0;background:none;border:none;color:#8e8e93;font-size:12px;text-decoration:underline;cursor:pointer}
+
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <div class="top-title">Розрахунок вартості</div>
+  <div class="top-title">Розрахунок вартості проєкту</div>
   <div class="top-sub">Оберіть базу та необхідні модулі</div>
 </div>
 
 <div class="content">
 
-  <div class="lbl">Тип проєкту</div>
-  <div id="sv-container"></div>
+<div class="lbl">Тип чат-бота</div>
+<div id="sv"></div>
 
-  <div class="lbl">Додаткові модулі</div>
-  <div class="options-block" id="ex-container"></div>
+<div class="lbl">Додаткові опції</div>
+<div class="extras-list" id="ex"></div>
 
-  <div class="lbl">Бонус</div>
-  <div class="bonus-box">
-    <div class="bonus-title">Технічна підтримка</div>
-    <div class="bonus-desc">Залишаюся на зв'язку після здачі проєкту. Допоможу з налаштуваннями та технічними питаннями протягом першого місяця.</div>
-  </div>
+<div class="lbl">Завжди включено</div>
+<div class="bonus-box">
+  <div class="bonus-title">Технічна підтримка</div>
+  <div class="bonus-desc">Я залишаюся з вами після здачі бота. Завжди на зв'язку — допоможу вирішити будь-яке питання. Не залишаю вас наодинці з ботом.</div>
+</div>
 
-  <div class="res-card" id="res-card">
-    <div style="font-size: 10px; text-transform: uppercase; color: #8e8e93; font-weight: 700;">Попередня сума</div>
-    <div class="res-total" id="res-total">0<span>грн</span></div>
-    <div class="res-details" id="res-details"></div>
-    <button class="btn-save" onclick="sendData('save')">Зберегти розрахунок</button>
-  </div>
+<div class="res-card" id="res">
+  <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8e8e93;">Попередня вартість від</div>
+  <div class="res-total" id="rp">0<span>грн</span></div>
+  <div class="res-details" id="bd"></div>
+  <button class="send-btn" onclick="send()">Зберегти розрахунок</button>
+</div>
 
-  <button class="btn-calc" onclick="calculate()">Порахувати</button>
-  <button class="btn-rst" onclick="resetAll()">Скинути все</button>
+<button class="calc-btn" onclick="calc()">Порахувати</button>
+<button class="rst-btn" onclick="rst()">Скинути все</button>
 
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-if(tg) tg.expand();
+var tg=window.Telegram&&window.Telegram.WebApp;
+if(tg)tg.expand();
 
-// Дані послуг (від дешевих до дорогих)
-const SERVICES = [
-  {id:'insta', name:'Insta-бот (тригери)', base:2000, desc:'Автовідповіді на коментарі, сторіз та ключові слова в Direct.'},
-  {id:'funnel', name:'Воронка лід-магніт', base:2500, desc:'Проста система видачі користі за підписку.'},
-  {id:'card', name:'Бот-візитка', base:5000, desc:'Ваша презентація: послуги, контакти та часті питання.'},
-  {id:'booking', name:'Запис на послуги', base:5000, desc:'Автоматизація бронювання часу та збору даних.'},
-  {id:'course', name:'Бот-курс / Марафон', base:6000, desc:'Видача уроків по кроках, перевірка завдань.'},
-  {id:'shop', name:'Магазин / Каталог', base:7000, desc:'Вітрина товарів з кошиком та описом.'}
+var SV=[
+  {id:'base', name:'Бот-база', base:2000, desc:'Основа під будь-яку задачу. Оберіть опції і зберіть свій бот.', tip:'Фундамент для подальшого розширення або одна конкретна функція.'},
+  {id:'funnel_low', name:'Лід-магніт простий', base:2000, desc:'Видача користі за підписку + 3 тригери в Instagram.', tip:'Людина пише слово — отримує подарунок. Включено реакції на коментарі та сторіз.'},
+  {id:'funnel_high', name:'Воронка лід-магніт', base:3000, desc:'Збір лідів + прогрів + перехід у Telegram.', tip:'Повна автоворонка: залучення, серія повідомлень та переведення клієнта в ТГ.'},
+  {id:'card', name:'Бот-візитка', base:5000, desc:'Презентація вас або бізнесу з кнопками та контентом.', tip:'Повноцінна заміна сайту всередині месенджера.'},
+  {id:'catalog', name:'Каталог', base:5000, desc:'Товари або послуги з описами, фото і цінами.', tip:'Вітрина, де клієнт може сам обрати послугу або товар.'},
+  {id:'course', name:'Бот-курс', base:6000, desc:'Навчальні матеріали, уроки, завдання, тести.', tip:'Автоматизація навчання або закритих клубів.'}
 ];
 
-const EXTRAS = [
-  {id:'quiz', name:'Тести / Квізи / Гейміфікація', price:2000},
-  {id:'strategy', name:'Розробка ідей та стратегії', price:1500},
-  {id:'pay', name:'Прийом оплат (WFP/Stripe/Mono)', price:1200},
-  {id:'wfp_set', name:'Налаштування кнопок оплати', price:500},
-  {id:'canva', name:'Оформлення в Canva', price:700},
-  {id:'copy', name:'Копірайтинг (тексти)', price:600},
-  {id:'google', name:'Інтеграція з Google Таблицями', price:800},
-  {id:'miniapp', name:'Telegram Mini App', price:3000}
+var EX=[
+  {id:'ig', label:'Додаткові Insta-тригери', price:1500},
+  {id:'game', label:'Тести / Квізи / Гейміфікація', price:1800},
+  {id:'google', label:'Інтеграція з Google Таблицями', price:1000},
+  {id:'pay', label:'Прийом оплат (WFP/Stripe/Mono)', price:1200},
+  {id:'design', label:'Дизайн у Canva', price:700},
+  {id:'copy', label:'Написання текстів (копірайт)', price:600},
+  {id:'miniapp', label:'Telegram Mini App', price:3000}
 ];
 
-let selectedId = 'insta';
-let selectedExtras = {};
+var sel='base', chk={};
 
-function render() {
-  // Рендер типів ботів
-  document.getElementById('sv-container').innerHTML = SERVICES.map(s => `
-    <div class="scard ${selectedId === s.id ? 'on' : ''}" onclick="selectService('${s.id}')">
-      <div class="ch">
-        <span class="ct">${s.name}</span>
-        <span class="cp">від ${s.base.toLocaleString()} грн</span>
-      </div>
-      <div class="cd">${s.desc}</div>
-    </div>
-  `).join('');
-
-  // Рендер додаткових опцій (єдиним списком)
-  document.getElementById('ex-container').innerHTML = EXTRAS.map(e => `
-    <div class="opt-row ${selectedExtras[e.id] ? 'on' : ''}" onclick="toggleExtra('${e.id}')">
-      <div class="dot-cb"></div>
-      <div class="opt-info">
-        <div class="opt-name">${e.name}</div>
-        <div class="opt-price">+ ${e.price.toLocaleString()} грн</div>
-      </div>
-    </div>
-  `).join('');
+function rs(){
+  document.getElementById('sv').innerHTML=SV.map(function(s){
+    var on=sel===s.id;
+    return '<div class="scard'+(on?' on':'')+'" onclick="ss(\''+s.id+'\')">'
+      +(on?'<div class="badge-hl">Обрано</div>':'')
+      +'<div class="ch"><span class="ct">'+s.name+'</span><span class="cp">від '+s.base.toLocaleString()+' грн</span></div>'
+      +'<div class="cd">'+s.desc+'</div>'
+      +(on?'<div class="tip">'+s.tip+'</div>':'')
+      +'</div>';
+  }).join('');
 }
 
-function selectService(id) { selectedId = id; render(); }
-function toggleExtra(id) { selectedExtras[id] = !selectedExtras[id]; render(); }
+function re(){
+  document.getElementById('ex').innerHTML=EX.map(function(e){
+    var c=chk[e.id];
+    return '<div class="opt-row'+(c?' on':'')+'" onclick="te(\''+e.id+'\')">'
+      +'<div class="round-cb'+(c?' checked':'')+'"></div>'
+      +'<div class="opt-info">'
+      +'<div class="opt-name">'+e.label+'</div>'
+      +'<div class="opt-price">+ '+e.price.toLocaleString()+' грн</div>'
+      +'</div></div>';
+  }).join('');
+}
 
-function calculate() {
-  const s = SERVICES.find(x => x.id === selectedId);
-  let total = s.base;
-  let rows = `<div class="res-row"><span>${s.name}</span><span>${s.base.toLocaleString()} грн</span></div>`;
+function ss(id){sel=id;rs();}
+function te(id){chk[id]=!chk[id];re();}
 
-  EXTRAS.forEach(e => {
-    if(selectedExtras[e.id]) {
-      total += e.price;
-      rows += `<div class="res-row"><span>+ ${e.name}</span><span>${e.price.toLocaleString()} грн</span></div>`;
+function calc(){
+  var s=SV.find(function(x){return x.id===sel;});
+  var total=s.base;
+  var rows='<div class="res-row"><span>'+s.name+'</span><span>'+s.base.toLocaleString()+' грн</span></div>';
+  EX.forEach(function(e){
+    if(chk[e.id]){
+      total+=e.price;
+      rows+='<div class="res-row"><span>+ '+e.label+'</span><span>'+e.price.toLocaleString()+' грн</span></div>';
     }
   });
-
-  rows += `<div class="res-row bold"><span>Разом</span><span>від ${total.toLocaleString()} грн</span></div>`;
-  
-  document.getElementById('res-total').innerHTML = total.toLocaleString() + '<span>грн</span>';
-  document.getElementById('res-details').innerHTML = rows;
-  document.getElementById('res-card').style.display = 'block';
+  rows+='<div class="res-row bold"><span>Разом</span><span>від '+total.toLocaleString()+' грн</span></div>';
+  document.getElementById('rp').innerHTML=total.toLocaleString()+'<span>грн</span>';
+  document.getElementById('bd').innerHTML=rows;
+  document.getElementById('res').style.display='block';
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
-function sendData(type) {
-  const s = SERVICES.find(x => x.id === selectedId);
-  let total = s.base;
-  let opts = [];
-  
-  EXTRAS.forEach(e => {
-    if(selectedExtras[e.id]) {
-      total += e.price;
-      opts.push(e.name);
-    }
-  });
-
-  const result = {
-    action: type === 'save' ? 'Зберегти розрахунок' : 'Консультація',
+function send(){
+  var s=SV.find(function(x){return x.id===sel;});
+  var total=s.base;
+  var data = {
     project: s.name,
-    modules: opts,
-    total: total + " грн"
+    options: [],
+    price: ""
   };
-
-  if(tg && tg.sendData) {
-    tg.sendData(JSON.stringify(result));
-  } else {
-    console.log(result);
-    alert("Дані підготовлені для ManyChat");
-  }
+  EX.forEach(function(e){
+    if(chk[e.id]){ total+=e.price; data.options.push(e.label); }
+  });
+  data.price = total.toLocaleString() + " грн";
+  if(tg&&tg.sendData){tg.sendData(JSON.stringify(data));}
 }
 
-function resetAll() {
-  selectedId = 'insta';
-  selectedExtras = {};
-  document.getElementById('res-card').style.display = 'none';
-  render();
-}
+function rst(){sel='base';chk={};rs();re();document.getElementById('res').style.display='none';}
 
-render();
+rs();re();
 </script>
 </body>
 </html>
