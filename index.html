@@ -10,11 +10,11 @@
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
   background:#ffffff;
-  background-image:radial-gradient(circle,#d0cfc8 1px,transparent 1px);
-  background-size:20px 20px;
+  background-image:radial-gradient(circle,#e0e0e0 1px,transparent 1px);
+  background-size:22px 22px;
   color:#1c1c1e;
-  min-height:100vh;
-  padding:0 0 40px;
+  padding-bottom:50px;
+  -webkit-font-smoothing:antialiased;
 }
 .top-bar{background:#F5C842;padding:16px 18px 14px;position:sticky;top:0;z-index:10}
 .top-title{font-size:17px;font-weight:700;color:#1c1200;letter-spacing:-.3px}
@@ -27,14 +27,14 @@ body{
 .scard{background:#fff;border:1.5px solid #e5e5ea;border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;transition:all .2s ease}
 .scard.on{border-color:#F5C842;background:#FFFDF5}
 .badge-hl{display:inline-block;background:#F5C842;color:#3a2c00;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:6px}
-.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.ct{font-size:15px;font-weight:700;color:#1c1c1e;line-height:1.2}
-.cp{font-size:13px;color:#8e8e93;white-space:nowrap;font-weight:500}
-.cd{font-size:12px;color:#8e8e93;margin-top:5px;line-height:1.4}
+.ch{display:flex;justify-content:space-between;align-items:center}
+.ct{font-size:15px;font-weight:600;color:#1c1c1e}
+.cp{font-size:13px;color:#8e8e93;font-weight:500}
+.cd{font-size:12px;color:#8e8e93;margin-top:6px;line-height:1.4}
 .tip{font-size:11px;color:#7a6500;background:#FFFDF5;border:1px solid #F5C842;border-radius:8px;padding:8px 10px;margin-top:8px;line-height:1.4}
 
-/* Єдиний блок додаткових опцій (Список) */
-.extras-list {
+/* Монолітний список додаткових послуг */
+.options-list {
   background: #fff;
   border: 1.5px solid #e5e5ea;
   border-radius: 16px;
@@ -53,7 +53,7 @@ body{
 .opt-row.on { background: #FFFDF5; }
 
 /* Круглий чекбокс */
-.round-cb {
+.dot-cb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -63,27 +63,26 @@ body{
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  background: #fff;
   flex-shrink: 0;
 }
-.opt-row.on .round-cb {
-  background: #F5C842;
+.opt-row.on .dot-cb {
   border-color: #F5C842;
+  background: #F5C842;
 }
-.opt-row.on .round-cb::after {
+.opt-row.on .dot-cb::after {
   content: '';
-  width: 5px;
-  height: 9px;
-  border: 2px solid #1c1200;
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg) translateY(-1px);
+  width: 6px;
+  height: 6px;
+  background: #1c1200;
+  border-radius: 50%;
 }
 
 .opt-info { flex-grow: 1; }
-.opt-name { font-size: 13px; font-weight: 600; color: #1c1c1e; }
-.opt-price { font-size: 11px; color: #8e8e93; margin-top: 2px; }
+.opt-name { font-size: 13px; font-weight: 500; color: #1c1c1e; }
+.opt-price { font-size: 11px; color: #8e8e93; margin-top: 1px; }
 
-/* Бонус */
+/* Блок підтримки */
 .bonus-box{background:#FFFDF5;border:1.5px solid #F5C842;border-radius:14px;padding:15px;margin-top:10px}
 .bonus-title{font-size:14px;font-weight:700;color:#1c1200}
 .bonus-desc{font-size:12px;color:#7a6500;margin-top:4px;line-height:1.5}
@@ -101,135 +100,169 @@ body{
 .res-total span { font-size: 16px; color: #8e8e93; margin-left: 5px; font-weight: 400; }
 .res-details { margin-top: 15px; border-top: 1px solid #f2f2f7; padding-top: 12px; }
 .res-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #3a3a3c; }
-.res-row.bold { font-weight: 800; border-top: 1px solid #f2f2f7; margin-top: 8px; padding-top: 8px; color:#1c1c1e; }
+.res-row.bold { font-weight: 700; border-top: 1px solid #f2f2f7; margin-top: 8px; padding-top: 8px; color:#1c1c1e; }
 
 /* Кнопки */
-.calc-btn{display:block;margin:25px auto 0;padding:12px 40px;background:#F5C842;color:#1c1200;border:none;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer}
-.send-btn{display:block;margin:15px auto 0;padding:11px 32px;background:#1c1c1e;color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer}
-.rst-btn{display:block;margin:15px auto 0;background:none;border:none;color:#8e8e93;font-size:12px;text-decoration:underline;cursor:pointer}
-
+.btn-calc {
+  display: block; width: 160px; margin: 25px auto 10px;
+  padding: 12px; background: #F5C842; color: #1c1200;
+  border: none; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.btn-save {
+  display: block; width: 180px; margin: 15px auto 0;
+  padding: 10px; background: #1c1c1e; color: #fff;
+  border: none; border-radius: 50px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-rst {
+  display: block; margin: 15px auto; background: none; border: none;
+  color: #8e8e93; font-size: 12px; cursor: pointer; text-decoration: underline;
+}
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <div class="top-title">Розрахунок вартості проєкту</div>
-  <div class="top-sub">Оберіть базу та необхідні модулі</div>
+  <div class="top-title">Калькулятор чат-ботів</div>
+  <div class="top-sub">Порахуйте вартість вашого проєкту онлайн</div>
 </div>
 
 <div class="content">
 
-<div class="lbl">Тип чат-бота</div>
-<div id="sv"></div>
+  <div class="lbl">Тип чат-бота</div>
+  <div id="sv-container"></div>
 
-<div class="lbl">Додаткові опції</div>
-<div class="extras-list" id="ex"></div>
+  <div class="lbl">Додаткові модулі</div>
+  <div class="options-list" id="ex-container"></div>
 
-<div class="lbl">Завжди включено</div>
-<div class="bonus-box">
-  <div class="bonus-title">Технічна підтримка</div>
-  <div class="bonus-desc">Я залишаюся з вами після здачі бота. Завжди на зв'язку — допоможу вирішити будь-яке питання. Не залишаю вас наодинці з ботом.</div>
-</div>
+  <div class="lbl">Бонус — завжди включено</div>
+  <div class="bonus-box">
+    <div class="bonus-title">Технічна підтримка</div>
+    <div class="bonus-desc">Я залишаюся з вами після здачі бота. Завжди на зв'язку — допоможу вирішити будь-яке питання.</div>
+  </div>
 
-<div class="res-card" id="res">
-  <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8e8e93;">Попередня вартість від</div>
-  <div class="res-total" id="rp">0<span>грн</span></div>
-  <div class="res-details" id="bd"></div>
-  <button class="send-btn" onclick="send()">Зберегти розрахунок</button>
-</div>
+  <div class="res-card" id="res-card">
+    <div style="font-size: 10px; text-transform: uppercase; color: #8e8e93; font-weight: 700;">Попередня вартість від</div>
+    <div class="res-total" id="res-total">0<span>грн</span></div>
+    <div class="res-details" id="res-details"></div>
+    <button class="btn-save" onclick="sendData()">Зберегти розрахунок</button>
+  </div>
 
-<button class="calc-btn" onclick="calc()">Порахувати</button>
-<button class="rst-btn" onclick="rst()">Скинути все</button>
+  <button class="btn-calc" onclick="calculate()">Порахувати</button>
+  <button class="btn-rst" onclick="resetAll()">Скинути вибір</button>
 
 </div>
 
 <script>
-var tg=window.Telegram&&window.Telegram.WebApp;
-if(tg)tg.expand();
+const tg = window.Telegram.WebApp;
+if(tg) tg.expand();
 
-var SV=[
-  {id:'base', name:'Бот-база', base:2000, desc:'Основа під будь-яку задачу. Оберіть опції і зберіть свій бот.', tip:'Фундамент для подальшого розширення або одна конкретна функція.'},
-  {id:'funnel_low', name:'Лід-магніт простий', base:2000, desc:'Видача користі за підписку + 3 тригери в Instagram.', tip:'Людина пише слово — отримує подарунок. Включено реакції на коментарі та сторіз.'},
-  {id:'funnel_high', name:'Воронка лід-магніт', base:3000, desc:'Збір лідів + прогрів + перехід у Telegram.', tip:'Повна автоворонка: залучення, серія повідомлень та переведення клієнта в ТГ.'},
-  {id:'card', name:'Бот-візитка', base:5000, desc:'Презентація вас або бізнесу з кнопками та контентом.', tip:'Повноцінна заміна сайту всередині месенджера.'},
-  {id:'catalog', name:'Каталог', base:5000, desc:'Товари або послуги з описами, фото і цінами.', tip:'Вітрина, де клієнт може сам обрати послугу або товар.'},
-  {id:'course', name:'Бот-курс', base:6000, desc:'Навчальні матеріали, уроки, завдання, тести.', tip:'Автоматизація навчання або закритих клубів.'}
+const SERVICES = [
+  {id:'base', name:'Бот-база', base:2000, desc:'Фундамент під будь-яку задачу.', tip:'Основа для бота: одна функція, тригер або проста автоматизація.'},
+  {id:'lm_insta', name:'Лід-магніт', base:2000, desc:'Видача подарунку через тригери в Instagram.', tip:'Людина пише коментар чи сторіз — бот миттєво надсилає матеріал у Direct.'},
+  {id:'lm_funnel', name:'Лід-магнітна воронка', base:3000, desc:'Перехід з Insta в Telegram та продовження спілкування.', tip:'Залучення в Instagram та автоматичне переведення клієнта в Telegram-канал або воронку.'},
+  {id:'card', name:'Бот-візитка', base:5000, desc:'Презентація бізнесу з кнопками та описом послуг.', tip:'Замінює сайт: клієнт дізнається про вас все прямо в месенджері.'},
+  {id:'booking', name:'Бронювання послуг', base:5000, desc:'Автоматизація запису клієнтів на час.', tip:'Збір контактів та запис у календар або Google Таблицю.'},
+  {id:'course', name:'Бот-курс / Марафон', base:6000, desc:'Навчальні матеріали та домашні завдання.', tip:'Автоматична видача уроків по кроках для експертів.'},
+  {id:'shop', name:'Магазин / Каталог', base:7000, desc:'Товари або послуги з кошиком та фото.', tip:'Повноцінна вітрина з цінами та описом кожного товару.'}
 ];
 
-var EX=[
-  {id:'ig', label:'Додаткові Insta-тригери', price:1500},
-  {id:'game', label:'Тести / Квізи / Гейміфікація', price:1800},
-  {id:'google', label:'Інтеграція з Google Таблицями', price:1000},
-  {id:'pay', label:'Прийом оплат (WFP/Stripe/Mono)', price:1200},
-  {id:'design', label:'Дизайн у Canva', price:700},
-  {id:'copy', label:'Написання текстів (копірайт)', price:600},
-  {id:'miniapp', label:'Telegram Mini App', price:3000}
+const EXTRAS = [
+  {id:'quiz', name:'Тести / Квізи / Гейміфікація', price:2000},
+  {id:'strategy', name:'Розробка ідей та стратегії', price:1500},
+  {id:'pay', name:'Прийом оплат (WFP/Stripe/Mono)', price:1200},
+  {id:'wfp_set', name:'Налаштування кнопок оплати', price:500},
+  {id:'design', name:'Дизайн у Canva', price:700},
+  {id:'copy', name:'Написання текстів (копірайт)', price:600},
+  {id:'google', name:'Інтеграція з Google Таблицями', price:800},
+  {id:'miniapp', name:'Telegram Mini App', price:3000}
 ];
 
-var sel='base', chk={};
+let selectedId = 'base';
+let selectedExtras = {};
 
-function rs(){
-  document.getElementById('sv').innerHTML=SV.map(function(s){
-    var on=sel===s.id;
-    return '<div class="scard'+(on?' on':'')+'" onclick="ss(\''+s.id+'\')">'
-      +(on?'<div class="badge-hl">Обрано</div>':'')
-      +'<div class="ch"><span class="ct">'+s.name+'</span><span class="cp">від '+s.base.toLocaleString()+' грн</span></div>'
-      +'<div class="cd">'+s.desc+'</div>'
-      +(on?'<div class="tip">'+s.tip+'</div>':'')
-      +'</div>';
+function render() {
+  document.getElementById('sv-container').innerHTML = SERVICES.map(s => {
+    const on = selectedId === s.id;
+    return `
+      <div class="scard ${on ? 'on' : ''}" onclick="selectService('${s.id}')">
+        ${on ? '<div class="badge-hl">Обрано</div>' : ''}
+        <div class="ch">
+          <span class="ct">${s.name}</span>
+          <span class="cp">від ${s.base.toLocaleString()} грн</span>
+        </div>
+        <div class="cd">${s.desc}</div>
+        ${on ? `<div class="tip">${s.tip}</div>` : ''}
+      </div>
+    `;
   }).join('');
+
+  document.getElementById('ex-container').innerHTML = EXTRAS.map(e => `
+    <div class="opt-row ${selectedExtras[e.id] ? 'on' : ''}" onclick="toggleExtra('${e.id}')">
+      <div class="dot-cb"></div>
+      <div class="opt-info">
+        <div class="opt-name">${e.name}</div>
+        <div class="opt-price">+ ${e.price.toLocaleString()} грн</div>
+      </div>
+    </div>
+  `).join('');
 }
 
-function re(){
-  document.getElementById('ex').innerHTML=EX.map(function(e){
-    var c=chk[e.id];
-    return '<div class="opt-row'+(c?' on':'')+'" onclick="te(\''+e.id+'\')">'
-      +'<div class="round-cb'+(c?' checked':'')+'"></div>'
-      +'<div class="opt-info">'
-      +'<div class="opt-name">'+e.label+'</div>'
-      +'<div class="opt-price">+ '+e.price.toLocaleString()+' грн</div>'
-      +'</div></div>';
-  }).join('');
-}
+function selectService(id) { selectedId = id; render(); }
+function toggleExtra(id) { selectedExtras[id] = !selectedExtras[id]; render(); }
 
-function ss(id){sel=id;rs();}
-function te(id){chk[id]=!chk[id];re();}
+function calculate() {
+  const s = SERVICES.find(x => x.id === selectedId);
+  let total = s.base;
+  let rows = `<div class="res-row"><span>${s.name}</span><span>${s.base.toLocaleString()} грн</span></div>`;
 
-function calc(){
-  var s=SV.find(function(x){return x.id===sel;});
-  var total=s.base;
-  var rows='<div class="res-row"><span>'+s.name+'</span><span>'+s.base.toLocaleString()+' грн</span></div>';
-  EX.forEach(function(e){
-    if(chk[e.id]){
-      total+=e.price;
-      rows+='<div class="res-row"><span>+ '+e.label+'</span><span>'+e.price.toLocaleString()+' грн</span></div>';
+  EXTRAS.forEach(e => {
+    if(selectedExtras[e.id]) {
+      total += e.price;
+      rows += `<div class="res-row"><span>+ ${e.name}</span><span>${e.price.toLocaleString()} грн</span></div>`;
     }
   });
-  rows+='<div class="res-row bold"><span>Разом</span><span>від '+total.toLocaleString()+' грн</span></div>';
-  document.getElementById('rp').innerHTML=total.toLocaleString()+'<span>грн</span>';
-  document.getElementById('bd').innerHTML=rows;
-  document.getElementById('res').style.display='block';
+
+  rows += `<div class="res-row bold"><span>Разом</span><span>від ${total.toLocaleString()} грн</span></div>`;
+  
+  document.getElementById('res-total').innerHTML = total.toLocaleString() + '<span>грн</span>';
+  document.getElementById('res-details').innerHTML = rows;
+  document.getElementById('res-card').style.display = 'block';
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
-function send(){
-  var s=SV.find(function(x){return x.id===sel;});
-  var total=s.base;
-  var data = {
-    project: s.name,
-    options: [],
-    price: ""
-  };
-  EX.forEach(function(e){
-    if(chk[e.id]){ total+=e.price; data.options.push(e.label); }
+function sendData() {
+  const s = SERVICES.find(x => x.id === selectedId);
+  let opts = [];
+  let total = s.base;
+  
+  EXTRAS.forEach(e => {
+    if(selectedExtras[e.id]) {
+      total += e.price;
+      opts.push(e.name);
+    }
   });
-  data.price = total.toLocaleString() + " грн";
-  if(tg&&tg.sendData){tg.sendData(JSON.stringify(data));}
+
+  const result = {
+    project: s.name,
+    modules: opts,
+    total: total.toLocaleString() + " грн"
+  };
+
+  if(tg && tg.sendData) {
+    tg.sendData(JSON.stringify(result));
+  } else {
+    alert(JSON.stringify(result));
+  }
 }
 
-function rst(){sel='base';chk={};rs();re();document.getElementById('res').style.display='none';}
+function resetAll() {
+  selectedId = 'base';
+  selectedExtras = {};
+  document.getElementById('res-card').style.display = 'none';
+  render();
+}
 
-rs();re();
+render();
 </script>
 </body>
 </html>
