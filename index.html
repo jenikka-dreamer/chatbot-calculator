@@ -3,121 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Бот Калькулятор</title>
+    <title>Service Calc</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg: #FDFBF7; /* Молочний */
-            --yellow: #FFD54F; /* Сонячний */
-            --dark: #333;
-            --gray: #888;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --card-active: #2a2a2a;
+            --accent-yellow: #FFD600; /* Теплий яскравий жовтий */
+            --text-main: #FFFFFF;
+            --text-dim: #999999;
+            --radius: 16px;
         }
 
         body {
-            font-family: -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
-            color: var(--dark);
+            color: var(--text-main);
             margin: 0; padding: 20px;
-            display: flex; flex-direction: column; gap: 20px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        h2 { font-size: 18px; text-align: center; margin: 0; }
+        .header { margin-bottom: 24px; }
+        .header h1 { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
+        .header p { color: var(--text-dim); font-size: 14px; margin-top: 4px; }
 
-        /* Компактні кнопки платформ */
-        .platforms { display: flex; justify-content: space-around; gap: 8px; }
-        .p-btn { 
-            flex: 1; padding: 10px 5px; background: #fff; border: 1px solid #ddd; 
-            border-radius: 12px; font-size: 12px; text-align: center; cursor: pointer;
-        }
-        .p-btn.active { background: var(--yellow); border-color: var(--yellow); font-weight: bold; }
-
-        /* Випадаючий список замість карток */
-        select {
-            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ddd;
-            font-size: 16px; background: #fff; outline: none;
+        .section-title { 
+            font-size: 12px; font-weight: 700; color: var(--text-dim); 
+            text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 12px;
         }
 
-        /* Опції маленькими рядками */
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .opt { display: flex; align-items: center; gap: 10px; font-size: 14px; }
-        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--yellow); }
-
-        /* Підсумок */
-        .total-box {
-            margin-top: 10px; padding: 20px; background: #fff; 
-            border-radius: 20px; border: 2px solid var(--yellow); text-align: center;
+        /* Картки послуг */
+        .grid { display: flex; flex-direction: column; gap: 10px; }
+        .card {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: var(--radius);
+            border: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        .price { font-size: 28px; font-weight: 800; margin: 5px 0; }
-        .bonus { font-size: 12px; color: green; font-weight: 600; }
-
-        .btn-send {
-            background: var(--yellow); border: none; width: 100%; padding: 16px;
-            border-radius: 15px; font-size: 16px; font-weight: bold; cursor: pointer;
+        .card.active {
+            border-color: var(--accent-yellow);
+            background: var(--card-active);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
+        .card-info h3 { margin: 0; font-size: 16px; display: flex; align-items: center; gap: 6px; }
+        .price { font-weight: 700; font-size: 14px; color: var(--accent-yellow); }
+
+        /* Підказка */
+        .info-icon {
+            font-size: 12px; width: 16px; height: 16px;
+            border: 1px solid var(--text-dim); color: var(--text-dim);
+            border-radius: 50%; display: inline-flex; align-items: center; 
+            justify-content: center; cursor: help;
+        }
+
+        /* Чек-лист */
+        .checkbox-list { display: flex; flex-direction: column; gap: 8px; }
+        .check-item {
+            background: var(--card-bg);
+            padding: 14px;
+            border-radius: 12px;
+            display: flex; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #282828;
+        }
+        .check-item input {
+            width: 20px; height: 20px; accent-color: var(--accent-yellow);
+            cursor: pointer;
+        }
+        .check-item div { font-size: 14px; flex-grow: 1; }
+        .check-item span { font-size: 12px; color: var(--text-dim); }
+
+        /* Фінальний блок */
+        .summary {
+            margin-top: 32px;
+            background: linear-gradient(145deg, #222, #1a1a1a);
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid #333;
+        }
+        .total-label { font-size: 14px; color: var(--text-dim); }
+        .total-price { font-size: 32px; font-weight: 900; color: var(--accent-yellow); margin: 4px 0; }
+        .bonus-badge { font-size: 12px; color: #4CAF50; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+        .btn-main {
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #C4A000; /* Об'єм */
+            transition: all 0.1s;
+        }
+        .btn-main:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #C4A000;
+        }
+
+        /* Popup */
+        #tooltip {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #333; padding: 20px; border-radius: 15px; z-index: 100;
+            width: 80%; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--accent-yellow);
+        }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 90; display: none; }
     </style>
 </head>
 <body>
 
-    <h2>☀️ Розрахунок вартості</h2>
-
-    <!-- 1. Платформи -->
-    <div class="platforms">
-        <div class="p-btn active" onclick="this.classList.toggle('active'); calc()">TG</div>
-        <div class="p-btn" onclick="this.classList.toggle('active'); calc()">Insta</div>
-        <div class="p-btn" onclick="this.classList.toggle('active'); calc()">FB</div>
-        <div class="p-btn" onclick="this.classList.toggle('active'); calc()">TikTok</div>
+    <div class="header">
+        <h1>Розрахунок послуг</h1>
+        <p>Мінімалістичний калькулятор розробки</p>
     </div>
 
-    <!-- 2. Основна послуга -->
-    <select id="mainService" onchange="calc()">
-        <option value="5000">Бот-візитка (від 5000 грн)</option>
-        <option value="2500">Воронка лід-магніт (від 2500 грн)</option>
-        <option value="5000">Бот для запису (від 5000 грн)</option>
-        <option value="6000">Каталог послуг (від 6000 грн)</option>
-        <option value="8000">Магазин з кошиком (від 8000 грн)</option>
-        <option value="5000">Закритий клуб (від 5000 грн)</option>
-    </select>
-
-    <!-- 3. Додатково (Тільки найважливіше) -->
-    <div class="options">
-        <label class="opt"><input type="checkbox" value="2000" onchange="calc()"> Гейміфікація (+2000)</label>
-        <label class="opt"><input type="checkbox" value="1000" onchange="calc()"> Рандомна карта / Мотивація (+1000)</label>
-        <label class="opt"><input type="checkbox" value="1000" onchange="calc()"> Оплата в боті (+1000)</label>
-        <label class="opt"><input type="checkbox" value="3000" onchange="calc()"> Telegram Mini App (+3000)</label>
+    <div class="section-title">Тип проекту</div>
+    <div class="grid">
+        <div class="card active" data-price="5000" data-name="Бот-візитка" onclick="selectCard(this)">
+            <div class="card-info">
+                <h3>Бот-візитка <span class="info-icon" onclick="showTip(event, 'Цифрова презентація вас або бізнесу з контактами, послугами та FAQ.')">?</span></h3>
+            </div>
+            <div class="price">5 000 грн</div>
+        </div>
+        <div class="card" data-price="2500" data-name="Воронка лід-магніт" onclick="selectCard(this)">
+            <div class="card-info">
+                <h3>Лід-магніт <span class="info-icon" onclick="showTip(event, 'Автоматизований шлях клієнта: від безкоштовної користі (магніту) до покупки.')">?</span></h3>
+            </div>
+            <div class="price">2 500 грн</div>
+        </div>
+        <div class="card" data-price="5000" data-name="Smart-запис" onclick="selectCard(this)">
+            <div class="card-info"><h3>Smart-запис</h3></div>
+            <div class="price">5 000 грн</div>
+        </div>
+        <div class="card" data-price="8000" data-name="Магазин / Каталог" onclick="selectCard(this)">
+            <div class="card-info"><h3>Магазин / Каталог</h3></div>
+            <div class="price">8 000 грн</div>
+        </div>
+        <div class="card" data-price="5000" data-name="Закритий клуб" onclick="selectCard(this)">
+            <div class="card-info"><h3>Закритий клуб</h3></div>
+            <div class="price">5 000 грн</div>
+        </div>
     </div>
 
-    <!-- 4. Разом -->
-    <div class="total-box">
-        <div style="font-size: 14px; color: var(--gray);">Орієнтовна вартість:</div>
-        <div class="price"><span id="res">5000</span> грн</div>
-        <div class="bonus">🎁 Техпідтримка 1 міс. у подарунок</div>
+    <div class="section-title">Додаткові модулі</div>
+    <div class="checkbox-list">
+        <label class="check-item">
+            <input type="checkbox" data-price="2000" data-name="Гейміфікація" onchange="calc()">
+            <div>Гейміфікація / Квізи <span>+2000</span></div>
+        </label>
+        <label class="check-item">
+            <input type="checkbox" data-price="1000" data-name="Платіжні системи" onchange="calc()">
+            <div>Stripe / Mono / WayForPay <span>+1000</span></div>
+        </label>
+        <label class="check-item">
+            <input type="checkbox" data-price="500" data-name="Налагодження WayForPay" onchange="calc()">
+            <div>Налаштування кнопок WFP <span>+500</span></div>
+        </label>
+        <label class="check-item">
+            <input type="checkbox" data-price="700" data-name="Дизайн Canva" onchange="calc()">
+            <div>Дизайн у Canva <span>+700</span></div>
+        </label>
+        <label class="check-item">
+            <input type="checkbox" data-price="600" data-name="Тексти" onchange="calc()">
+            <div>Написання текстів <span>+600</span></div>
+        </label>
+        <label class="check-item">
+            <input type="checkbox" data-price="800" data-name="Google Таблиці" onchange="calc()">
+            <div>Google Таблиці <span>+800</span></div>
+        </label>
+        <label class="check-item">
+            <input type="checkbox" data-price="3000" data-name="Mini App" onchange="calc()">
+            <div>Telegram Mini App <span>+3000</span></div>
+        </label>
     </div>
 
-    <button class="btn-send" onclick="send()">Надіслати замовлення</button>
+    <div class="summary">
+        <div class="total-label">Орієнтовна вартість</div>
+        <div class="total-price"><span id="res">5000</span> грн</div>
+        <div class="bonus-badge">✅ Техпідтримка 1 міс. (Бонус 0 грн)</div>
+        <button class="btn-main" onclick="sendData()">НАДІСЛАТИ ЗАМОВЛЕННЯ</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hideTip()"></div>
+    <div id="tooltip">
+        <p id="tipText"></p>
+        <button class="btn-main" onclick="hideTip()">Зрозуміло</button>
+    </div>
 
 <script>
     let tg = window.Telegram.WebApp;
     tg.expand();
 
-    function calc() {
-        let base = parseInt(document.getElementById('mainService').value);
-        let extra = 0;
-        document.querySelectorAll('input[type="checkbox"]:checked').forEach(c => {
-            extra += parseInt(c.value);
-        });
-        document.getElementById('res').innerText = (base + extra).toLocaleString();
+    function selectCard(el) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        calc();
     }
 
-    function send() {
-        let platforms = [];
-        document.querySelectorAll('.p-btn.active').forEach(b => platforms.push(b.innerText));
+    function calc() {
+        const activeCard = document.querySelector('.card.active');
+        let total = parseInt(activeCard.dataset.price);
         
-        let data = {
-            service: document.getElementById('mainService').options[document.getElementById('mainService').selectedIndex].text,
-            platforms: platforms.join(', '),
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(c => {
+            total += parseInt(c.dataset.price);
+        });
+        
+        document.getElementById('res').innerText = total.toLocaleString();
+    }
+
+    function showTip(e, text) {
+        e.stopPropagation();
+        document.getElementById('tipText').innerText = text;
+        document.getElementById('tooltip').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideTip() {
+        document.getElementById('tooltip').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function sendData() {
+        const activeService = document.querySelector('.card.active').dataset.name;
+        let options = [];
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(c => options.push(c.dataset.name));
+        
+        const data = {
+            service: activeService,
+            options: options,
             total: document.getElementById('res').innerText + " грн"
         };
-        
         tg.sendData(JSON.stringify(data));
     }
 </script>
