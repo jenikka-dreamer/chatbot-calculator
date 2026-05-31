@@ -7,229 +7,213 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg: #1a1a1a;
-            --dots: #333333;
-            --card-bg: rgba(40, 40, 40, 0.6);
-            --accent-yellow: #FFC107; /* Теплий сонячний жовтий */
-            --text-main: #e0e0e0;
-            --text-dim: #909090;
+            --bg: #ffffff;
+            --dots: #e5e5e5;
+            --graphite: #333333;
+            --gray-light: #f7f7f7;
+            --accent-yellow: #FFD600;
+            --border: #eeeeee;
         }
 
-        /* Ефект зошита в крапку */
+        /* Фон - білий зошит у крапку */
         body {
-            font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             background-image: radial-gradient(var(--dots) 1px, transparent 1px);
-            background-size: 24px 24px;
-            color: var(--text-main);
-            margin: 0; padding: 20px;
-            font-weight: 300; /* Тонкий шрифт */
-            line-height: 1.4;
+            background-size: 22px 22px;
+            color: var(--graphite);
+            margin: 0; padding: 24px;
+            font-weight: 300;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .header { margin-bottom: 30px; }
-        .header h1 { font-size: 22px; font-weight: 400; margin: 0; }
-        .header p { color: var(--text-dim); font-size: 13px; margin-top: 5px; }
+        .header { margin-bottom: 32px; }
+        .header h1 { font-size: 24px; font-weight: 500; margin: 0; letter-spacing: -0.5px; }
+        .header p { font-size: 14px; color: #888; margin-top: 4px; }
 
         .section-title { 
-            font-size: 11px; font-weight: 600; color: var(--text-dim); 
-            text-transform: uppercase; letter-spacing: 1.5px; margin: 25px 0 15px;
+            font-size: 11px; font-weight: 600; color: #aaa; 
+            text-transform: uppercase; letter-spacing: 1.2px; margin: 28px 0 12px;
         }
 
-        /* Картки основних послуг */
+        /* Список основних послуг */
         .grid-main { display: flex; flex-direction: column; gap: 10px; }
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(5px);
+            background: var(--bg);
             padding: 18px;
             border-radius: 12px;
-            border: 1px solid #3d3d3d;
+            border: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.3s;
+            cursor: pointer; transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .card.active {
             border-color: var(--accent-yellow);
-            background: rgba(255, 193, 7, 0.05);
+            background: #fffef5;
+            box-shadow: 0 4px 12px rgba(255, 214, 0, 0.1);
         }
-        .card h3 { margin: 0; font-size: 15px; font-weight: 400; display: flex; align-items: center; gap: 8px; }
-        .price-label { font-size: 14px; font-weight: 500; color: var(--accent-yellow); }
+        .card h3 { margin: 0; font-size: 16px; font-weight: 400; display: flex; align-items: center; gap: 8px; }
+        .price-label { font-size: 14px; font-weight: 500; }
 
-        /* Кругла підказка (i) */
+        /* Простий знак i для підказок */
         .info-btn {
-            width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--text-dim);
-            font-size: 10px; display: inline-flex; align-items: center; justify-content: center;
-            color: var(--text-dim); cursor: pointer;
+            width: 18px; height: 18px; border-radius: 50%; border: 1px solid #ddd;
+            font-size: 11px; display: inline-flex; align-items: center; justify-content: center;
+            color: #bbb; cursor: pointer;
         }
 
         /* Чек-лист у два стовпчики */
         .checkbox-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
         .check-item {
-            background: var(--card-bg);
-            padding: 12px;
+            background: var(--bg);
+            padding: 14px;
             border-radius: 12px;
-            border: 1px solid #3d3d3d;
+            border: 1px solid var(--border);
             display: flex; align-items: center; gap: 10px;
-            cursor: pointer; position: relative;
+            cursor: pointer; transition: 0.2s;
         }
 
-        /* Прихований рідний чекбокс */
         .check-item input { display: none; }
 
-        /* Кастомний круглий чекбокс */
+        /* Круглий чекбокс */
         .custom-check {
-            width: 18px; height: 18px; border-radius: 50%;
-            border: 1px solid #555; position: relative; flex-shrink: 0;
-            transition: 0.2s;
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 1px solid #ddd; position: relative; flex-shrink: 0;
+            transition: 0.2s; background: #fff;
         }
         .check-item input:checked + .custom-check {
             background: var(--accent-yellow);
             border-color: var(--accent-yellow);
         }
         .check-item input:checked + .custom-check::after {
-            content: ''; position: absolute; top: 5px; left: 5px;
-            width: 8px; height: 8px; border-radius: 50%; background: #000;
+            content: ''; position: absolute; top: 6px; left: 6px;
+            width: 8px; height: 8px; border-radius: 50%; background: #333;
         }
 
-        .check-text { font-size: 12px; color: var(--text-main); line-height: 1.2; }
-        .check-price { display: block; font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .check-text { font-size: 13px; font-weight: 400; color: var(--graphite); }
+        .check-price { display: block; font-size: 11px; color: #999; margin-top: 2px; }
 
         /* Підсумок */
         .summary {
-            margin-top: 35px;
-            padding: 25px;
-            border-radius: 18px;
-            background: #222;
-            border: 1px solid #333;
+            margin-top: 40px;
+            padding: 24px;
+            border-radius: 20px;
+            background: var(--gray-light);
             text-align: center;
         }
-        .total-val { font-size: 30px; font-weight: 200; color: var(--accent-yellow); margin: 5px 0; }
-        .bonus { font-size: 11px; color: #81c784; letter-spacing: 0.5px; }
+        .total-val { font-size: 32px; font-weight: 300; color: var(--graphite); margin: 8px 0; }
+        .bonus-text { font-size: 12px; color: #666; font-weight: 400; }
 
-        /* Об'ємна жовта кнопка */
+        /* Кнопка */
         .btn-send {
             background: var(--accent-yellow);
-            color: #1a1a1a;
+            color: var(--graphite);
             border: none;
             width: 100%;
-            padding: 18px;
-            border-radius: 14px;
-            font-size: 15px;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 16px;
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 24px;
             cursor: pointer;
-            box-shadow: 0 5px 0 #b38600; /* Глибина */
+            box-shadow: 0 4px 0 #e5c100;
             transition: 0.1s;
         }
         .btn-send:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #b38600;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #e5c100;
         }
 
-        /* Модальне вікно підказок */
+        /* Модальне вікно */
         .modal {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #282828; padding: 25px; border-radius: 20px;
-            width: 80%; display: none; z-index: 1000; border: 1px solid #444;
+            background: #fff; padding: 24px; border-radius: 20px;
+            width: 80%; display: none; z-index: 1000; border: 1px solid #eee;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: none; z-index: 999;
+            background: rgba(255,255,255,0.8); display: none; z-index: 999;
+            backdrop-filter: blur(4px);
         }
         .modal-close {
-            background: var(--accent-yellow); border: none; padding: 10px 20px;
-            border-radius: 10px; margin-top: 15px; width: 100%; font-weight: 600;
+            background: var(--graphite); color: #fff; border: none; padding: 12px;
+            border-radius: 12px; margin-top: 20px; width: 100%; font-weight: 500;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Розрахунок послуг</h1>
-        <p>Натисніть на (і) для деталей проєкту</p>
+        <h1>Розрахунок вартості</h1>
+        <p>Оберіть необхідні параметри проєкту</p>
     </div>
 
-    <div class="section-title">Тип вашого проєкту</div>
+    <div class="section-title">Тип чат-бота</div>
     <div class="grid-main">
         <div class="card active" data-price="5000" data-name="Бот-візитка" onclick="select(this)">
-            <h3>Бот-візитка <span class="info-btn" onclick="tip(event, 'Цифрова візитка: контакти, перелік послуг, FAQ та автоматичні відповіді клієнтам.')">i</span></h3>
+            <h3>Бот-візитка <span class="info-btn" onclick="tip(event, 'Цифрова презентація: контакти, послуги та відповіді на часті питання.')">?</span></h3>
             <div class="price-label">5 000 ₴</div>
         </div>
-        <div class="card" data-price="2500" data-name="Лід-магніт" onclick="select(this)">
-            <h3>Воронка лід-магніт <span class="info-btn" onclick="tip(event, 'Маркетингова воронка, що видає корисний контент в обмін на підписку та прогріває до покупки.')">i</span></h3>
+        <div class="card" data-price="2500" data-name="Воронка продажів" onclick="select(this)">
+            <h3>Воронка продажів <span class="info-btn" onclick="tip(event, 'Автоматизований шлях клієнта: від знайомства до першої покупки.')">?</span></h3>
             <div class="price-label">2 500 ₴</div>
         </div>
-        <div class="card" data-price="5000" data-name="Запис" onclick="select(this)">
-            <h3>Бронювання послуг/часу</h3>
-            <div class="price-label">5 000 ₴</div>
-        </div>
-        <div class="card" data-price="8000" data-name="Магазин" onclick="select(this)">
-            <h3>Магазин / Каталог товарів</h3>
-            <div class="price-label">8 000 ₴</div>
-        </div>
-        <div class="card" data-price="5000" data-name="Клуб" onclick="select(this)">
-            <h3>Закритий клуб / Спільнота</h3>
+        <div class="card" data-price="5000" data-name="Запис / Консультація" onclick="select(this)">
+            <h3>Запис на консультацію</h3>
             <div class="price-label">5 000 ₴</div>
         </div>
     </div>
 
-    <div class="section-title">Додаткові модулі</div>
+    <div class="section-title">Додаткові послуги</div>
     <div class="checkbox-grid">
         <label class="check-item">
-            <input type="checkbox" data-price="2000" data-name="Гейміфікація" onchange="calc()">
+            <input type="checkbox" data-price="2000" data-name="Тести / Квізи" onchange="calc()">
             <div class="custom-check"></div>
-            <div class="check-text">Гейміфікація/Квізи<span class="check-price">+2000 ₴</span></div>
+            <div class="check-text">Тести / Квізи<span class="check-price">+2000 ₴</span></div>
         </label>
         <label class="check-item">
-            <input type="checkbox" data-price="1000" data-name="Платіжні системи" onchange="calc()">
+            <input type="checkbox" data-price="1500" data-name="Розробка ідей" onchange="calc()">
             <div class="custom-check"></div>
-            <div class="check-text">Stripe / Mono / WFP<span class="check-price">+1000 ₴</span></div>
+            <div class="check-text">Розробка ідей<span class="check-price">+1500 ₴</span></div>
         </label>
         <label class="check-item">
-            <input type="checkbox" data-price="500" data-name="Налаштування оплати" onchange="calc()">
+            <input type="checkbox" data-price="1000" data-name="Оплата (Stripe/Mono)" onchange="calc()">
             <div class="custom-check"></div>
-            <div class="check-text">Налаштування каси<span class="check-price">+500 ₴</span></div>
+            <div class="check-text">Прийом оплат<span class="check-price">+1000 ₴</span></div>
         </label>
         <label class="check-item">
             <input type="checkbox" data-price="700" data-name="Дизайн Canva" onchange="calc()">
             <div class="custom-check"></div>
-            <div class="check-text">Дизайн у Canva<span class="check-price">+700 ₴</span></div>
+            <div class="check-text">Дизайн Canva<span class="check-price">+700 ₴</span></div>
         </label>
         <label class="check-item">
             <input type="checkbox" data-price="600" data-name="Копірайтинг" onchange="calc()">
             <div class="custom-check"></div>
-            <div class="check-text">Тексти (копірайт)<span class="check-price">+600 ₴</span></div>
-        </label>
-        <label class="check-item">
-            <input type="checkbox" data-price="800" data-name="Google Таблиці" onchange="calc()">
-            <div class="custom-check"></div>
-            <div class="check-text">Авто-звіт у Таблиці<span class="check-price">+800 ₴</span></div>
+            <div class="check-text">Тексти послуг<span class="check-price">+600 ₴</span></div>
         </label>
         <label class="check-item">
             <input type="checkbox" data-price="3000" data-name="Mini App" onchange="calc()">
             <div class="custom-check"></div>
-            <div class="check-text">Telegram Mini App<span class="check-price">+3000 ₴</span></div>
-        </label>
-        <label class="check-item">
-            <input type="checkbox" data-price="1000" data-name="Рандомна карта" onchange="calc()">
-            <div class="custom-check"></div>
-            <div class="check-text">Рандомна карта/дня<span class="check-price">+1000 ₴</span></div>
+            <div class="check-text">Mini App<span class="check-price">+3000 ₴</span></div>
         </label>
     </div>
 
     <div class="summary">
-        <div style="font-size: 12px; color: var(--text-dim);">Орієнтовна вартість</div>
+        <div style="font-size: 12px; color: #999; text-transform: uppercase;">Орієнтовна сума</div>
         <div class="total-val"><span id="res">5000</span> ₴</div>
-        <div class="bonus">🎁 Бонус: техпідтримка 1 місяць</div>
-        <button class="btn-send" onclick="send()">НАДІСЛАТИ РОЗРАХУНОК</button>
+        <div class="bonus-text">Включено: 1 місяць технічної підтримки</div>
+        <button class="btn-send" onclick="send()">НАДІСЛАТИ ЗАМОВЛЕННЯ</button>
     </div>
 
     <div class="modal-overlay" id="overlay" onclick="closeTip()"></div>
     <div class="modal" id="modal">
-        <p id="modalText" style="font-size: 14px; line-height: 1.5; color: #ccc;"></p>
+        <p id="modalText" style="font-size: 15px; color: #333;"></p>
         <button class="modal-close" onclick="closeTip()">Зрозуміло</button>
     </div>
 
