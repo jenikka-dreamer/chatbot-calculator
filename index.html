@@ -98,4 +98,142 @@
     <div class="chip active" onclick="togglePlatform(this, 'Telegram')">Telegram</div>
     <div class="chip" onclick="togglePlatform(this, 'Facebook')">Facebook</div>
     <div class="chip" onclick="togglePlatform(this, 'TikTok')">TikTok</div>
-</di
+</div>
+
+<div class="section-title">2. Оберіть тип проєкту</div>
+<div class="service-list">
+    <div class="service-card" data-price="2500" data-name="Воронка лід-магніт">
+        <div class="service-info"><h3>Воронка лід-магніт</h3><p>Маркетинговий інструмент</p></div>
+        <div class="price">від 2.5к</div>
+    </div>
+    <div class="service-card active" data-price="5000" data-name="Бот-візитка">
+        <div class="service-info"><h3>Бот-візитка</h3><p>Базове представлення бізнесу</p></div>
+        <div class="price">від 5к</div>
+    </div>
+    <div class="service-card" data-price="5000" data-name="Smart-запис">
+        <div class="service-info"><h3>Бот для запису</h3><p>Автоматизація бронювання</p></div>
+        <div class="price">від 5к</div>
+    </div>
+    <div class="service-card" data-price="6000" data-name="Каталог">
+        <div class="service-info"><h3>Каталог послуг/товарів</h3><p>Зручна вітрина в боті</p></div>
+        <div class="price">від 6к</div>
+    </div>
+    <div class="service-card" data-price="8000" data-name="Магазин з кошиком">
+        <div class="service-info"><h3>Магазин з кошиком <span class="tag-tg">Тільки TG</span></h3><p>Повноцінний e-commerce</p></div>
+        <div class="price">від 8к</div>
+    </div>
+    <div class="service-card" data-price="5000" data-name="Закритий клуб">
+        <div class="service-info"><h3>Закритий клуб <span class="tag-tg">Тільки TG</span></h3><p>Платна підписка та доступ</p></div>
+        <div class="price">від 5к</div>
+    </div>
+</div>
+
+<div class="section-title">3. Додаткові модулі</div>
+<div class="options-grid">
+    <label class="option-item">
+        <input type="checkbox" data-price="2000" data-name="Гейміфікація" onchange="calc()">
+        <div class="option-details"><div>Квізи / Гейміфікація</div><span>+2 000 грн</span></div>
+    </label>
+    <label class="option-item">
+        <input type="checkbox" data-price="1000" data-name="Рандомна карта" onchange="calc()">
+        <div class="option-details"><div>Рандомна карта / Мотивація</div><span>Щоденна видача • +1 000 грн</span></div>
+    </label>
+    <label class="option-item">
+        <input type="checkbox" data-price="800" data-name="Google Таблиці" onchange="calc()">
+        <div class="option-details"><div>Google Таблиці</div><span>Авто-збір даних • +800 грн</span></div>
+    </label>
+    <label class="option-item">
+        <input type="checkbox" data-price="1000" data-name="Оплата" onchange="calc()">
+        <div class="option-details"><div>Оплата в боті</div><span>LiqPay / Mono / Stripe • +1 000 грн</span></div>
+    </label>
+    <label class="option-item">
+        <input type="checkbox" data-price="700" data-name="Дизайн Canva" onchange="calc()">
+        <div class="option-details"><div>Оформлення в Canva</div><span>Ваш фірмовий стиль • +700 грн</span></div>
+    </label>
+    <label class="option-item">
+        <input type="checkbox" data-price="600" data-name="Копірайтинг" onchange="calc()">
+        <div class="option-details"><div>Написання текстів</div><span>Професійні тези • +600 грн</span></div>
+    </label>
+    <label class="option-item">
+        <input type="checkbox" data-price="3000" data-name="Mini App" onchange="calc()">
+        <div class="option-details"><div>Telegram Mini App</div><span>Web-інтерфейс • +3 000 грн</span></div>
+    </label>
+</div>
+
+<div class="summary-box">
+    <div id="check-list"></div>
+    <div class="summary-item bonus-line"><span>🎁 Техпідтримка (1 міс.)</span><span>0 грн</span></div>
+    
+    <div class="total-line">
+        <div style="font-weight: 700;">Орієнтовно:</div>
+        <div class="total-price"><span id="total-val">5000</span> грн</div>
+    </div>
+    <button class="btn-main" onclick="submit()">📩 Надіслати замовлення</button>
+</div>
+
+<script>
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.MainButton.hide();
+
+    function togglePlatform(el, name) {
+        el.classList.toggle('active');
+        calc();
+    }
+
+    // Логіка вибору послуги (тільки одна)
+    const cards = document.querySelectorAll('.service-card');
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            cards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            calc();
+        });
+    });
+
+    function calc() {
+        const activeService = document.querySelector('.service-card.active');
+        let total = parseInt(activeTypePrice = activeService.dataset.price);
+        let html = `<div class="summary-item"><span>${activeService.dataset.name}</span><span>${activeService.dataset.price} грн</span></div>`;
+
+        // Платформи
+        let platforms = [];
+        document.querySelectorAll('.chip.active').forEach(p => platforms.push(p.innerText));
+        if(platforms.length > 0) {
+            html += `<div class="summary-item"><span style="color:var(--text-gray)">Платформи: ${platforms.join(', ')}</span><span></span></div>`;
+        }
+
+        // Опції
+        document.querySelectorAll('.option-item input:checked').forEach(opt => {
+            total += parseInt(opt.dataset.price);
+            html += `<div class="summary-item"><span>+ ${opt.dataset.name}</span><span>${opt.dataset.price} грн</span></div>`;
+        });
+
+        document.getElementById('total-val').innerText = total.toLocaleString();
+        document.getElementById('check-list').innerHTML = html;
+    }
+
+    function submit() {
+        const activeService = document.querySelector('.service-card.active').dataset.name;
+        const total = document.getElementById('total-val').innerText;
+        let platforms = [];
+        document.querySelectorAll('.chip.active').forEach(p => platforms.push(p.innerText));
+        
+        let options = [];
+        document.querySelectorAll('.option-item input:checked').forEach(opt => options.push(opt.dataset.name));
+
+        const result = {
+            service: activeService,
+            platforms: platforms,
+            options: options,
+            price: total + " грн"
+        };
+
+        tg.sendData(JSON.stringify(result));
+    }
+
+    calc();
+</script>
+
+</body>
+</html>
