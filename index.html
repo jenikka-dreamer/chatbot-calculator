@@ -127,4 +127,34 @@ function calc(){
   calcTotal=s.base;
   var rows='<div class="br"><span>'+s.name+'</span><span>від '+s.base.toLocaleString('uk-UA')+' грн</span></div>';
   EX.forEach(function(e){if(chk[e.id]){calcTotal+=e.price;rows+='<div class="br"><span>'+e.label+'</span><span>від '+e.price.toLocaleString('uk-UA')+' грн</span></div>';}});
-  rows+='<div class="br tot"><span>Разом</span><span>від '+calcTotal.toLocaleString('uk-UA')+' грн</span>
+  rows+='<div class="br tot"><span>Разом</span><span>від '+calcTotal.toLocaleString('uk-UA')+' грн</span></div>';
+  document.getElementById('rp').innerHTML=calcTotal.toLocaleString('uk-UA')+'<span>грн</span>';
+  document.getElementById('bd').innerHTML=rows;
+  document.getElementById('res').style.display='block';
+  document.getElementById('res').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+async function saveAndClose(){
+  if(!sel)return;
+  var s=SV.find(function(x){return x.id===sel;});
+  var extras=[];
+  EX.forEach(function(e){if(chk[e.id])extras.push(e.label);});
+  var btn=document.getElementById('closeBtn');
+  var txt=document.getElementById('savingText');
+  btn.disabled=true;
+  txt.textContent='Зберігаємо...';
+  var userId=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:null;
+  try{
+    await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:userId?String(userId):'',project:s.name,options:extras.join(', ')||'без додаткових опцій',price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'})});
+    txt.textContent='';
+    btn.disabled=false;
+    if(tg){tg.sendData(JSON.stringify({action:'calc_done',project:s.name,price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'}));tg.close();}
+  }catch(err){
+    txt.textContent='Помилка збереження. Спробуйте ще раз.';
+    btn.disabled=false;
+  }
+}
+function rst(){sel=null;chk={};calcTotal=0;rs();re();document.getElementById('res').style.display='none';}
+rs();re();
+</script>
+</body>
+</html>
