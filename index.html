@@ -144,12 +144,24 @@ async function saveAndClose(){
   txt.textContent='Зберігаємо...';
   var userId=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:null;
   try{
-    await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscriber_id:userId?String(userId):'',project:s.name,options:extras.join(', ')||'без додаткових опцій',price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'})});
+    await fetch('/api/save',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        subscriber_id:userId?String(userId):'',
+        project:s.name,
+        options:extras.join(', ')||'без додаткових опцій',
+        price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'
+      })
+    });
     txt.textContent='';
     btn.disabled=false;
-    if(tg){tg.sendData(JSON.stringify({action:'calc_done',project:s.name,price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'}));tg.close();}
+    if(tg){
+      tg.sendData('розраховано');
+      tg.close();
+    }
   }catch(err){
-    txt.textContent='Помилка збереження. Спробуйте ще раз.';
+    txt.textContent='Помилка. Спробуйте ще раз.';
     btn.disabled=false;
   }
 }
