@@ -2,173 +2,171 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор чат-ботів</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+html{background:#ffffff}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
-  background:#ffffff;
-  background-image:radial-gradient(circle,#e0e0e0 1.2px,transparent 1.2px);
-  background-size:20px 20px;
-  color:#333;
-  padding-bottom:50px;
-}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background-color:#ffffff;background-image:radial-gradient(circle,#c0bdb4 1.5px,transparent 1.5px);background-size:20px 20px;color:#1c1c1e;min-height:100vh;padding:0 0 40px}
 .top-bar{background:#F5C842;padding:16px 18px 14px;position:sticky;top:0;z-index:10}
-.top-title{font-size:17px;font-weight:700;color:#1c1200}
+.top-title{font-size:17px;font-weight:700;color:#1c1200;letter-spacing:-.3px}
 .top-sub{font-size:12px;color:#5a4800;margin-top:1px}
 .content{padding:18px 16px 0}
-.lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin:22px 0 8px;padding-left:5px}
-
-/* Картки ботів */
-.scard{background:rgba(255,255,255,0.8);border:1.5px solid #eee;border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;transition:0.2s}
-.scard.on{border-color:#F5C842;background:#FFFDF5}
-.badge-hl{display:inline-block;background:#F5C842;color:#333;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;margin-bottom:6px;text-transform:uppercase}
-.ch{display:flex;justify-content:space-between;align-items:center}
-.ct{font-size:15px;font-weight:600}
-.cp{font-size:13px;color:#999}
-.cd{font-size:12px;color:#888;margin-top:5px;line-height:1.4}
-.tip{font-size:11px;color:#7a6500;background:#FFFDF5;border:1px solid #F5C842;border-radius:8px;padding:8px;margin-top:8px}
-
-/* Опції To-do списком */
-.options-list { background:#fff; border:1.5px solid #eee; border-radius:16px; overflow:hidden; display:flex; flex-direction:column; }
-.opt-row { display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f9f9f9; cursor:pointer; }
-.opt-row:last-child { border-bottom:none; }
-.opt-row.on { background:#FFFDF5; }
-
-.dot-cb { width:18px; height:18px; border-radius:50%; border:1.5px solid #ddd; margin-right:12px; display:flex; align-items:center; justify-content:center; transition:0.2s; flex-shrink:0; }
-.opt-row.on .dot-cb { border-color:#F5C842; background:#F5C842; }
-.opt-row.on .dot-cb::after { content:''; width:6px; height:6px; background:#1c1200; border-radius:50%; }
-
-.opt-info { flex-grow:1; }
-.opt-name { font-size:13px; font-weight:500; }
-.opt-price { font-size:11px; color:#999; }
-
-/* Результат */
-.res-card { background:#fff; border:2px solid #F5C842; border-radius:16px; padding:20px; margin-top:25px; display:none; }
-.res-total { font-size:32px; font-weight:800; }
-.res-total span { font-size:16px; color:#999; margin-left:5px; font-weight:400; }
-.res-details { margin-top:15px; border-top:1px solid #eee; padding-top:12px; }
-.res-row { display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px; color:#666; }
-.res-row.bold { font-weight:700; border-top:1px solid #eee; margin-top:8px; padding-top:8px; color:#000; }
-
-.btn-calc { display:block; width:150px; margin:25px auto 10px; padding:12px; background:#F5C842; color:#333; border:none; border-radius:50px; font-size:14px; font-weight:700; cursor:pointer; }
-.btn-save { display:block; width:100%; margin-top:15px; padding:12px; background:#1c1c1e; color:#fff; border:none; border-radius:50px; font-size:14px; font-weight:600; cursor:pointer; }
+.lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8e8e93;margin:20px 0 8px}
+.scard{background:rgba(255,255,255,0.75);border:1.5px solid #e5e5ea;border-radius:14px;padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s;backdrop-filter:blur(4px)}
+.scard.on{border-color:#F5C842;background:rgba(255,253,232,0.88)}
+.scard.on .ct{color:#1c1200}
+.scard.on .cd{color:#7a6500}
+.scard.on .cp{color:#b38a00}
+.badge-hl{display:inline-block;background:#F5C842;color:#3a2c00;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ct{font-size:15px;font-weight:700;color:#1c1c1e;line-height:1.2}
+.cp{font-size:13px;color:#8e8e93;white-space:nowrap;margin-top:2px;font-weight:500}
+.cd{font-size:12px;color:#8e8e93;margin-top:5px;line-height:1.4}
+.tip{font-size:11px;color:#7a6500;background:rgba(255,253,232,0.9);border:1px solid #F5C842;border-radius:8px;padding:5px 9px;margin-top:7px;line-height:1.4}
+.extras-bg{background:rgba(255,255,255,0.65);border:1.5px solid #e5e5ea;border-radius:16px;overflow:hidden;backdrop-filter:blur(4px)}
+.ei{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid rgba(242,242,247,0.9);cursor:pointer;transition:background .1s}
+.ei:last-child{border-bottom:none}
+.ei.on{background:rgba(255,253,232,0.85)}
+.round-cb{width:22px;height:22px;border-radius:50%;border:2px solid #d1d1d6;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;background:#fff;margin-top:1px}
+.round-cb.checked{background:#F5C842;border-color:#F5C842}
+.round-cb.checked::after{content:'';width:5px;height:9px;border:2px solid #1c1200;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px);display:block}
+.ei-info{flex:1}
+.en{font-size:14px;font-weight:600;color:#1c1c1e;line-height:1.3}
+.ep{font-size:12px;color:#8e8e93;margin-top:2px}
+.ehint{font-size:11px;color:#b38a00;margin-top:3px;line-height:1.4}
+.bonus-box{background:rgba(255,253,232,0.75);border:1.5px solid #F5C842;border-radius:14px;padding:13px 15px;margin-top:4px;backdrop-filter:blur(4px)}
+.bonus-title{font-size:14px;font-weight:700;color:#1c1200}
+.bonus-desc{font-size:12px;color:#7a6500;margin-top:4px;line-height:1.5}
+.disclaimer{background:rgba(255,255,255,0.55);border:1px solid #e5e5ea;border-radius:12px;padding:12px 14px;margin-top:16px;backdrop-filter:blur(4px)}
+.disclaimer p{font-size:11px;color:#8e8e93;line-height:1.6}
+.disclaimer strong{color:#5a5040;font-weight:600}
+.res{background:rgba(255,255,255,0.8);border:2px solid #F5C842;border-radius:16px;padding:16px;margin-top:20px;display:none;backdrop-filter:blur(4px)}
+.rl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8e8e93;margin-bottom:4px}
+.rp{font-size:34px;font-weight:800;color:#1c1c1e;letter-spacing:-1px;line-height:1}
+.rp span{font-size:16px;font-weight:500;color:#8e8e93;margin-left:4px}
+.bd{margin-top:12px;border-top:1px solid #f2f2f7;padding-top:10px}
+.br{display:flex;justify-content:space-between;font-size:13px;color:#3a3a3c;margin-bottom:5px}
+.br.tot{font-weight:800;color:#1c1c1e;border-top:1px solid #f2f2f7;margin-top:6px;padding-top:8px;font-size:14px}
+.rn{font-size:11px;color:#aeaeb2;margin-top:10px;line-height:1.6}
+.calc-btn{display:block;margin:16px auto 0;padding:12px 40px;background:#F5C842;color:#1c1200;border:none;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;transition:background .15s,transform .1s}
+.calc-btn:active{background:#e0b530;transform:scale(.97)}
+.close-btn{display:block;width:100%;margin-top:14px;padding:13px;background:#1c1c1e;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center}
+.close-btn:disabled{background:#8e8e93;cursor:not-allowed}
+.rst-btn{display:block;margin:10px auto 0;padding:9px 28px;background:transparent;color:#8e8e93;border:1.5px solid #e5e5ea;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer}
+.saving{font-size:12px;color:#8e8e93;text-align:center;margin-top:8px}
 </style>
 </head>
 <body>
-
 <div class="top-bar">
   <div class="top-title">Калькулятор чат-ботів</div>
-  <div class="top-sub">Оберіть базу та модулі для розрахунку</div>
+  <div class="top-sub">Попередній розрахунок вартості вашого проєкту</div>
 </div>
-
 <div class="content">
-  <div class="lbl">Тип чат-бота</div>
-  <div id="sv-container"></div>
-
-  <div class="lbl">Додаткові розширення</div>
-  <div class="options-list" id="ex-container"></div>
-
-  <div class="res-card" id="res-card">
-    <div style="font-size:10px; font-weight:700; color:#999; text-transform:uppercase">Попередня сума від</div>
-    <div class="res-total" id="res-total">0<span>грн</span></div>
-    <div class="res-details" id="res-details"></div>
-    <button class="btn-save" id="saveBtn" onclick="saveToManyChat()">Зберегти розрахунок</button>
-  </div>
-
-  <button class="btn-calc" onclick="calculate()">Порахувати</button>
+<div class="lbl">Тип бота</div>
+<div id="sv"></div>
+<div class="lbl">Додаткові опції</div>
+<div class="extras-bg"><div id="ex"></div></div>
+<div class="lbl">Бонус — завжди включено</div>
+<div class="bonus-box">
+  <div class="bonus-title">Технічна підтримка</div>
+  <div class="bonus-desc">Залишаюся з вами після здачі бота. Завжди на зв'язку — допоможу вирішити будь-яке питання. Не залишаю вас наодинці.</div>
 </div>
-
+<div class="disclaimer">
+  <p><strong>Це попередній розрахунок.</strong> Фінальна вартість узгоджується індивідуально — все залежить від складності і ваших задач. Ціна може бути як меншою, так і більшою. Розповім детально до початку роботи.</p>
+</div>
+<div class="res" id="res">
+  <div class="rl">Попередня вартість від</div>
+  <div class="rp" id="rp">0<span>грн</span></div>
+  <div class="bd" id="bd"></div>
+  <div class="rn">Це орієнтовна сума. Точну вартість обговоримо разом — ціна може змінитись залежно від вашого проєкту.</div>
+  <button class="close-btn" id="closeBtn" onclick="saveAndClose()">Переглянути приклади робіт</button>
+  <div class="saving" id="savingText"></div>
+</div>
+<button class="calc-btn" onclick="calc()">Порахувати</button>
+<button class="rst-btn" onclick="rst()">Скинути</button>
+</div>
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-
-// Бот-база тепер на першому місці
-const SERVICES = [
-  {id:'base', name:'Бот-база', base:2000, desc:'Основа під будь-яку задачу.', tip:'Ідеально для старту: одна функція, тригер або квіз.'},
-  {id:'funnel', name:'Воронка лід-магніт', base:3000, desc:'Залучення клієнтів в Instagram та перевід у Telegram.', tip:'Автоматична воронка: лід-магніт + прогрів + перехід у ТГ.'},
-  {id:'card', name:'Бот-візитка', base:5000, desc:'Презентація бізнесу з описом послуг.', tip:'Повна заміна сайту всередині месенджера.'},
-  {id:'course', name:'Бот-курс / Марафон', base:6000, desc:'Навчальні матеріали та домашні завдання.', tip:'Автоматична видача уроків та перевірка по кроках.'},
-  {id:'shop', name:'Магазин / Каталог', base:7000, desc:'Вітрина товарів з кошиком та цінами.', tip:'Е-комерція всередині Telegram.'}
+var tg=window.Telegram&&window.Telegram.WebApp;
+if(tg)tg.expand();
+var SV=[
+  {id:'ig_lead',name:'Лід-магніт в Instagram',base:2000,desc:'Видача подарунку або корисного матеріалу в обмін на дію. Включає 1 тригер (слово, коментар або сторіз).',tip:'Людина пише слово або реагує на сторіз — отримує подарунок автоматично. Без подальшого прогріву'},
+  {id:'base',name:'Бот-база',base:2000,desc:'Основа під будь-яку задачу. Оберіть опції і зберіть свій бот під конкретну мету.',tip:'Підходить якщо потрібна одна конкретна функція: тест, рулетка, тригер або проста автоматизація'},
+  {id:'funnel',name:'Воронка лід-магніт',base:3000,desc:'Збір лідів + прогрів + перехід у Telegram або до покупки.',tip:'Повна автоворонка: лід-магніт, серія прогрівних повідомлень, продаж або перехід у Telegram'},
+  {id:'card',name:'Бот-візитка',base:5000,desc:'Презентація вас або вашого бізнесу з кнопками і корисним контентом.',tip:'Замінює сайт — клієнт дізнається про вас і ваші послуги прямо в Telegram'},
+  {id:'catalog',name:'Каталог',base:5000,desc:'Товари або послуги з описами, фото і цінами.',tip:'Клієнт сам переглядає і обирає — як міні-магазин у Telegram'},
+  {id:'course',name:'Бот-курс',base:6000,desc:'Навчальні матеріали, уроки, домашні завдання, тести.',tip:'Для експертів і коучів — видає контент автоматично по кроках'},
 ];
-
-const EXTRAS = [
-  {id:'quiz', name:'Тести / Квізи / Гейміфікація', price:2000},
-  {id:'strategy', name:'Розробка стратегії', price:1500},
-  {id:'pay', name:'Прийом оплат (Stripe/Mono)', price:1200},
-  {id:'wfp_set', name:'Налаштування терміналу оплати', price:500},
-  {id:'design', name:'Дизайн у Canva', price:700},
-  {id:'copy', name:'Копірайтинг', price:600},
-  {id:'google', name:'Google Таблиці', price:800}
+var EX=[
+  {id:'design',label:'Дизайн у Canva / макет',price:500,hint:'Оформлення карток, банерів, шаблонів для бота'},
+  {id:'copy',label:'Написання текстів',price:700,hint:''},
+  {id:'google',label:'Інтеграція з Google Таблицями',price:1000,hint:'Автозбір заявок, статистика, CRM у таблиці'},
+  {id:'payment',label:'Оплата в боті',price:1000,hint:'Налаштування кнопок оплати, WayForPay, логіка після оплати'},
+  {id:'triggers',label:'Тригери та автоматизація',price:500,hint:'Реакція на слово, коментар, сторіз. Від 3 шт — знижка 20%'},
+  {id:'game',label:'Тест / рулетка / гейміфікація',price:1500,hint:'Квіз, карта дня, розіграш — будь-яка інтерактивна механіка'},
 ];
-
-let selectedId = 'base';
-let selectedExtras = {};
-
-function render() {
-  document.getElementById('sv-container').innerHTML = SERVICES.map(s => `
-    <div class="scard ${selectedId === s.id ? 'on' : ''}" onclick="selectS('${s.id}')">
-      ${selectedId === s.id ? '<div class="badge-hl">Обрано</div>' : ''}
-      <div class="ch"><span class="ct">${s.name}</span><span class="cp">від ${s.base.toLocaleString()} грн</span></div>
-      <div class="cd">${s.desc}</div>
-      ${selectedId === s.id ? `<div class="tip">${s.tip}</div>` : ''}
-    </div>
-  `).join('');
-
-  document.getElementById('ex-container').innerHTML = EXTRAS.map(e => `
-    <div class="opt-row ${selectedExtras[e.id] ? 'on' : ''}" onclick="toggleE('${e.id}')">
-      <div class="dot-cb"></div>
-      <div class="opt-info"><div class="opt-name">${e.name}</div><div class="opt-price">+ ${e.price.toLocaleString()} грн</div></div>
-    </div>
-  `).join('');
+var sel=null,chk={},calcTotal=0;
+function rs(){
+  document.getElementById('sv').innerHTML=SV.map(function(s){
+    var on=sel===s.id;
+    return '<div class="scard'+(on?' on':'')+'" onclick="ss(\''+s.id+'\')">'+(on?'<div class="badge-hl">Обрано</div>':'')+'<div class="ch"><span class="ct">'+s.name+'</span><span class="cp">від '+s.base.toLocaleString('uk-UA')+' грн</span></div><div class="cd">'+s.desc+'</div>'+(on?'<div class="tip">'+s.tip+'</div>':'')+'</div>';
+  }).join('');
 }
-
-function selectS(id) { selectedId = id; render(); }
-function toggleE(id) { selectedExtras[id] = !selectedExtras[id]; render(); }
-
-function calculate() {
-  const s = SERVICES.find(x => x.id === selectedId);
-  let total = s.base;
-  let rows = `<div class="res-row"><span>${s.name}</span><span>${s.base.toLocaleString()} грн</span></div>`;
-  EXTRAS.forEach(e => { if(selectedExtras[e.id]) { total += e.price; rows += `<div class="res-row"><span>+ ${e.name}</span><span>${e.price.toLocaleString()} грн</span></div>`; } });
-  rows += `<div class="res-row bold"><span>Разом</span><span>від ${total.toLocaleString()} грн</span></div>`;
-  document.getElementById('res-total').innerHTML = total.toLocaleString() + '<span>грн</span>';
-  document.getElementById('res-details').innerHTML = rows;
-  document.getElementById('res-card').style.display = 'block';
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+function re(){
+  document.getElementById('ex').innerHTML=EX.map(function(e){
+    var c=chk[e.id];
+    return '<div class="ei'+(c?' on':'')+'" onclick="te(\''+e.id+'\')">'+'<div class="round-cb'+(c?' checked':'')+'"></div>'+'<div class="ei-info"><div class="en">'+e.label+'</div><div class="ep">від '+e.price.toLocaleString('uk-UA')+' грн</div>'+(e.hint?'<div class="ehint">'+e.hint+'</div>':'')+'</div></div>';
+  }).join('');
 }
-
-async function saveToManyChat() {
-  const btn = document.getElementById('saveBtn');
-  btn.disabled = true; btn.innerText = 'Збереження...';
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const mId = urlParams.get('m_id'); 
-  const userId = mId || (tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null);
-
-  const s = SERVICES.find(x => x.id === selectedId);
-  let opts = [];
-  let total = s.base;
-  EXTRAS.forEach(e => { if(selectedExtras[e.id]) { total += e.price; opts.push(e.name); } });
-
-  try {
-    await fetch('/api/save', {
-      method: 'POST',
-      body: JSON.stringify({
-        user_id: String(userId),
-        project: s.name,
-        options: opts,
-        price: total.toLocaleString() + " грн"
+function ss(id){sel=id;rs();}
+function te(id){chk[id]=!chk[id];re();}
+function calc(){
+  if(!sel){alert('Оберіть тип бота');return;}
+  var s=SV.find(function(x){return x.id===sel;});
+  calcTotal=s.base;
+  var rows='<div class="br"><span>'+s.name+'</span><span>від '+s.base.toLocaleString('uk-UA')+' грн</span></div>';
+  EX.forEach(function(e){if(chk[e.id]){calcTotal+=e.price;rows+='<div class="br"><span>'+e.label+'</span><span>від '+e.price.toLocaleString('uk-UA')+' грн</span></div>';}});
+  rows+='<div class="br tot"><span>Разом</span><span>від '+calcTotal.toLocaleString('uk-UA')+' грн</span></div>';
+  document.getElementById('rp').innerHTML=calcTotal.toLocaleString('uk-UA')+'<span>грн</span>';
+  document.getElementById('bd').innerHTML=rows;
+  document.getElementById('res').style.display='block';
+  document.getElementById('res').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+async function saveAndClose(){
+  if(!sel)return;
+  var s=SV.find(function(x){return x.id===sel;});
+  var extras=[];
+  EX.forEach(function(e){if(chk[e.id])extras.push(e.label);});
+  var btn=document.getElementById('closeBtn');
+  var txt=document.getElementById('savingText');
+  btn.disabled=true;
+  txt.textContent='Зберігаємо...';
+  var userId=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:null;
+  try{
+    await fetch('/api/save',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        subscriber_id:userId?String(userId):'',
+        project:s.name,
+        options:extras.join(', ')||'без додаткових опцій',
+        price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'
       })
     });
-    tg.close();
-  } catch (e) {
-    alert('Помилка збереження'); btn.disabled = false; btn.innerText = 'Зберегти розрахунок';
+    txt.textContent='';
+    btn.disabled=false;
+    if(tg){
+      tg.sendData('розраховано');
+      tg.close();
+    }
+  }catch(err){
+    txt.textContent='Помилка. Спробуйте ще раз.';
+    btn.disabled=false;
   }
 }
-render();
+function rst(){sel=null;chk={};calcTotal=0;rs();re();document.getElementById('res').style.display='none';}
+rs();re();
 </script>
 </body>
 </html>
