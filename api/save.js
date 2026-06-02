@@ -1,16 +1,16 @@
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Тільки POST' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { user_id, project, options, price } = req.body;
   const MC_TOKEN = process.env.MC_TOKEN;
-  const FLOW_ID = 'content20260601122810_802107';
+  const FLOW_ID = 'content20260601122810_802107'; 
 
   if (!user_id || user_id === "null") {
-    return res.status(400).json({ error: "Не знайдено ID користувача. Відкрийте бот." });
+    return res.status(400).json({ error: "User ID is missing" });
   }
 
   try {
-    // 1. Пошук ManyChat ID
+    // 1. Шукаємо підписника ManyChat за Telegram ID
     const findRes = await fetch(`https://api.manychat.com/fb/user/findBySystemField?system_field=telegram_id&value=${user_id}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${MC_TOKEN}` }
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
     const mcId = findData.data[0].id;
 
-    // 2. Оновлення полів
+    // 2. Оновлюємо поля
     const update = (name, val) => fetch('https://api.manychat.com/fb/user/setCustomFieldByName', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MC_TOKEN}` },
@@ -32,11 +32,11 @@ export default async function handler(req, res) {
 
     await Promise.all([
       update('calc_project', project),
-      update('calc_options', options.join(', ')),
+      update('calc_options', options),
       update('calc_price', price)
     ]);
 
-    // 3. Тригер Flow
+    // 3. Запускаємо повідомлення
     await fetch('https://api.manychat.com/fb/sending/triggerFlow', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MC_TOKEN}` },
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     });
 
     return res.status(200).json({ success: true });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 }
