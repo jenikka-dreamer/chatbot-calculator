@@ -38,7 +38,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 user_id: subscriber_id,
-                flow_ns: 'content20260602135607_750950' // ТУТ МАЄ БУТИ ВАШ ID FLOW
+                flow_ns: 'https://t.me/jenikka_dreamlabs_bot?start=w55190119' // ТУТ МАЄ БУТИ ВАШ ID FLOW
             })
         });
 
