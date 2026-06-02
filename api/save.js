@@ -1,49 +1,49 @@
-module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+export default async function handler(req, res) {
+    if (req.method !== 'POST') return res.status(405).json({ message: 'Method not allowed' });
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).end();
+    const { subscriber_id, project, options, price } = req.body;
+    const MC_TOKEN = process.env.MC_TOKEN; // Переконайтеся, що додали це в Environment Variables на Vercel
 
-  const { subscriber_id, project, options, price } = req.body;
+    try {
+        // 1. Функція для оновлення полів
+        const updateField = async (fieldName, fieldValue) => {
+            return fetch('https://api.manychat.com/fb/user/setCustomFieldByName', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${MC_TOKEN}`
+                },
+                body: JSON.stringify({
+                    user_id: subscriber_id,
+                    field_name: fieldName,
+                    field_value: fieldValue
+                })
+            });
+        };
 
-  if (!subscriber_id) {
-    return res.status(400).json({ error: 'subscriber_id is required' });
-  }
+        // 2. Оновлюємо всі поля
+        await Promise.all([
+            updateField('calc_project', project),
+            updateField('calc_options', options),
+            updateField('calc_price', price)
+        ]);
 
-  const MANYCHAT_TOKEN = process.env.MANYCHAT_TOKEN;
+        // 3. ТЕПЕР ГОЛОВНЕ: Просимо ManyChat запустити Flow для клієнта
+        // Замініть 'CONTENT20240101...' на ID вашого Flow (ланцюжка) в ManyChat
+        await fetch('https://api.manychat.com/fb/sending/triggerFlow', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${MC_TOKEN}`
+            },
+            body: JSON.stringify({
+                user_id: subscriber_id,
+                flow_ns: 'content20260602135607_750950' // ТУТ МАЄ БУТИ ВАШ ID FLOW
+            })
+        });
 
-  try {
-    await fetch('https://api.manychat.com/fb/subscriber/setCustomFieldByName', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MANYCHAT_TOKEN}`
-      },
-      body: JSON.stringify({ subscriber_id, field_name: 'calc_project', field_value: project })
-    });
-
-    await fetch('https://api.manychat.com/fb/subscriber/setCustomFieldByName', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MANYCHAT_TOKEN}`
-      },
-      body: JSON.stringify({ subscriber_id, field_name: 'calc_options', field_value: options })
-    });
-
-    await fetch('https://api.manychat.com/fb/subscriber/setCustomFieldByName', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MANYCHAT_TOKEN}`
-      },
-      body: JSON.stringify({ subscriber_id, field_name: 'calc_price', field_value: price })
-    });
-
-    return res.status(200).json({ success: true });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-};
+        return res.status(200).json({ success: true });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
