@@ -1,49 +1,59 @@
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ message: 'Method not allowed' });
 
-    const { subscriber_id, project, options, price } = req.body;
-    const MC_TOKEN = process.env.MC_TOKEN; // Переконайтеся, що додали це в Environment Variables на Vercel
+    const { user_id, project, options, price } = JSON.parse(req.body);
+    const MC_TOKEN = process.env.MC_TOKEN;
+
+    if (!MC_TOKEN) {
+        console.error("ПОМИЛКА: Токен MC_TOKEN не знайдено в Environment Variables!");
+        return res.status(500).json({ error: "No API Token" });
+    }
 
     try {
-        // 1. Функція для оновлення полів
         const updateField = async (fieldName, fieldValue) => {
-            return fetch('https://api.manychat.com/fb/user/setCustomFieldByName', {
+            const response = await fetch('https://api.manychat.com/fb/user/setCustomFieldByName', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${MC_TOKEN}`
                 },
                 body: JSON.stringify({
-                    user_id: subscriber_id,
+                    user_id: user_id,
                     field_name: fieldName,
                     field_value: fieldValue
                 })
             });
+            return response.json();
         };
 
-        // 2. Оновлюємо всі поля
-        await Promise.all([
+        // Виконуємо оновлення
+        const results = await Promise.all([
             updateField('calc_project', project),
-            updateField('calc_options', options),
+            updateField('calc_options', options.join(', ')),
             updateField('calc_price', price)
         ]);
 
-        // 3. ТЕПЕР ГОЛОВНЕ: Просимо ManyChat запустити Flow для клієнта
-        // Замініть 'CONTENT20240101...' на ID вашого Flow (ланцюжка) в ManyChat
-        await fetch('https://api.manychat.com/fb/sending/triggerFlow', {
+        console.log("Результати оновлення полів:", results);
+
+        // Тригер Flow
+        const triggerResponse = await fetch('https://api.manychat.com/fb/sending/triggerFlow', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${MC_TOKEN}`
             },
             body: JSON.stringify({
-                user_id: subscriber_id,
-                flow_ns: 'https://t.me/jenikka_dreamlabs_bot?start=w55190119' // ТУТ МАЄ БУТИ ВАШ ID FLOW
+                user_id: user_id,
+                flow_ns: 'content20260601122810_802107' // ПЕРЕВІРТЕ ЦЕЙ ID ЩЕ РАЗ
             })
         });
 
-        return res.status(200).json({ success: true });
+        const triggerData = await triggerResponse.json();
+        console.log("Результат тригера Flow:", triggerData);
+
+        return res.status(200).json({ success: true, triggerData });
     } catch (error) {
+        console.error("Критична помилка:", error);
         return res.status(500).json({ error: error.message });
     }
 }
