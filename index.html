@@ -80,8 +80,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
   <div class="rl">Попередня вартість від</div>
   <div class="rp" id="rp">0<span>грн</span></div>
   <div class="bd" id="bd"></div>
-  <div class="rn">Це орієнтовна сума. Точну вартість обговоримо разом — ціна може змінитись залежно від вашого проєкту.</div>
-  <button class="close-btn" id="closeBtn" onclick="saveAndClose()">Переглянути приклади робіт</button>
+  <div class="rn">Точну вартість обговоримо разом — ціна може змінитись залежно від вашого проєкту.</div>
+  <button class="close-btn" id="closeBtn" onclick="saveAndClose()">Зберегти розрахунок</button>
   <div class="saving" id="savingText"></div>
 </div>
 <button class="calc-btn" onclick="calc()">Порахувати</button>
@@ -90,22 +90,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 <script>
 var tg=window.Telegram&&window.Telegram.WebApp;
 if(tg)tg.expand();
+
+// ПОРЯДОК ЗМІНЕНО: База тепер перша
 var SV=[
-  {id:'ig_lead',name:'Лід-магніт в Instagram',base:2000,desc:'Видача подарунку або корисного матеріалу в обмін на дію. Включає 1 тригер (слово, коментар або сторіз).',tip:'Людина пише слово або реагує на сторіз — отримує подарунок автоматично. Без подальшого прогріву'},
   {id:'base',name:'Бот-база',base:2000,desc:'Основа під будь-яку задачу. Оберіть опції і зберіть свій бот під конкретну мету.',tip:'Підходить якщо потрібна одна конкретна функція: тест, рулетка, тригер або проста автоматизація'},
-  {id:'funnel',name:'Воронка лід-магніт',base:3000,desc:'Збір лідів + прогрів + перехід у Telegram або до покупки.',tip:'Повна автоворонка: лід-магніт, серія прогрівних повідомлень, продаж або перехід у Telegram'},
-  {id:'card',name:'Бот-візитка',base:5000,desc:'Презентація вас або вашого бізнесу з кнопками і корисним контентом.',tip:'Замінює сайт — клієнт дізнається про вас і ваші послуги прямо в Telegram'},
+  {id:'ig_lead',name:'Лід-магніт в Instagram',base:2000,desc:'Видача подарунку або корисного матеріалу в обмін на дію. Включає 1 тригер (слово, коментар або сторіз).',tip:'Людина пише слово або реагує на сторіз — отримує подарунок автоматично.'},
+  {id:'funnel',name:'Воронка лід-магніт',base:3000,desc:'Збір лідів + прогрів + перехід у Telegram або до покупки.',tip:'Повна автоворонка: лід-магніт, серія повідомлень, продаж або перехід у Telegram'},
+  {id:'card',name:'Бот-візитка',base:5000,desc:'Презентація вас або вашого бізнесу з кнопками і корисним контентом.',tip:'Замінює сайт — клієнт дізнається про вас прямо в Telegram'},
   {id:'catalog',name:'Каталог',base:5000,desc:'Товари або послуги з описами, фото і цінами.',tip:'Клієнт сам переглядає і обирає — як міні-магазин у Telegram'},
   {id:'course',name:'Бот-курс',base:6000,desc:'Навчальні матеріали, уроки, домашні завдання, тести.',tip:'Для експертів і коучів — видає контент автоматично по кроках'},
 ];
+
 var EX=[
   {id:'design',label:'Дизайн у Canva / макет',price:500,hint:'Оформлення карток, банерів, шаблонів для бота'},
   {id:'copy',label:'Написання текстів',price:700,hint:''},
   {id:'google',label:'Інтеграція з Google Таблицями',price:1000,hint:'Автозбір заявок, статистика, CRM у таблиці'},
   {id:'payment',label:'Оплата в боті',price:1000,hint:'Налаштування кнопок оплати, WayForPay, логіка після оплати'},
-  {id:'triggers',label:'Тригери та автоматизація',price:500,hint:'Реакція на слово, коментар, сторіз. Від 3 шт — знижка 20%'},
+  {id:'triggers',label:'Тригери та автоматизація',price:500,hint:'Реакція на слово, коментар, сторіз.'},
   {id:'game',label:'Тест / рулетка / гейміфікація',price:1500,hint:'Квіз, карта дня, розіграш — будь-яка інтерактивна механіка'},
 ];
+
 var sel=null,chk={},calcTotal=0;
 function rs(){
   document.getElementById('sv').innerHTML=SV.map(function(s){
@@ -133,6 +137,7 @@ function calc(){
   document.getElementById('res').style.display='block';
   document.getElementById('res').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+
 async function saveAndClose(){
   if(!sel)return;
   var s=SV.find(function(x){return x.id===sel;});
@@ -142,8 +147,11 @@ async function saveAndClose(){
   var txt=document.getElementById('savingText');
   btn.disabled=true;
   txt.textContent='Зберігаємо...';
+  
   var userId=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:null;
+  
   try{
+    // Відправка API на Vercel (ManyChat)
     await fetch('/api/save',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -154,11 +162,16 @@ async function saveAndClose(){
         price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'
       })
     });
+    
     txt.textContent='';
     btn.disabled=false;
+    
+    // ТУТ ВАЖЛИВО:
     if(tg){
-      tg.sendData('розраховано');
-      tg.close();
+      // 1. Надсилаємо ключове слово боту
+      tg.sendData('розраховано_ціну'); 
+      // 2. Закриваємо додаток
+      setTimeout(() => { tg.close(); }, 100);
     }
   }catch(err){
     txt.textContent='Помилка. Спробуйте ще раз.';
