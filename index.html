@@ -14,6 +14,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .top-sub{font-size:12px;color:#5a4800;margin-top:1px}
 .content{padding:18px 16px 0}
 .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8e8e93;margin:20px 0 8px}
+
+/* перемикач платформ */
+.seg{display:flex;background:rgba(255,255,255,0.7);border:1.5px solid #e5e5ea;border-radius:12px;padding:3px;margin-top:2px;backdrop-filter:blur(4px)}
+.seg button{flex:1;padding:10px 8px;border:none;background:transparent;border-radius:9px;font-size:14px;font-weight:700;color:#8e8e93;cursor:pointer;transition:all .15s;font-family:inherit}
+.seg button.on{background:#F5C842;color:#1c1200}
+
 .scard{background:rgba(255,255,255,0.75);border:1.5px solid #e5e5ea;border-radius:14px;padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s;backdrop-filter:blur(4px)}
 .scard.on{border-color:#F5C842;background:rgba(255,253,232,0.88)}
 .scard.on .ct{color:#1c1200}
@@ -25,6 +31,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .cp{font-size:13px;color:#8e8e93;white-space:nowrap;margin-top:2px;font-weight:500}
 .cd{font-size:12px;color:#8e8e93;margin-top:5px;line-height:1.4}
 .tip{font-size:11px;color:#7a6500;background:rgba(255,253,232,0.9);border:1px solid #F5C842;border-radius:8px;padding:5px 9px;margin-top:7px;line-height:1.4}
+
+/* пакети */
+
+
+
+
+
+
+
+
+.pcard.on 
+
 .extras-bg{background:rgba(255,255,255,0.65);border:1.5px solid #e5e5ea;border-radius:16px;overflow:hidden;backdrop-filter:blur(4px)}
 .ei{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid rgba(242,242,247,0.9);cursor:pointer;transition:background .1s}
 .ei:last-child{border-bottom:none}
@@ -47,15 +65,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .rp{font-size:34px;font-weight:800;color:#1c1c1e;letter-spacing:-1px;line-height:1}
 .rp span{font-size:16px;font-weight:500;color:#8e8e93;margin-left:4px}
 .bd{margin-top:12px;border-top:1px solid #f2f2f7;padding-top:10px}
-.br{display:flex;justify-content:space-between;font-size:13px;color:#3a3a3c;margin-bottom:5px}
+.br{display:flex;justify-content:space-between;font-size:13px;color:#3a3a3c;margin-bottom:5px;gap:10px}
+.br span:first-child{flex:1}
+.br span:last-child{white-space:nowrap}
 .br.tot{font-weight:800;color:#1c1c1e;border-top:1px solid #f2f2f7;margin-top:6px;padding-top:8px;font-size:14px}
 .rn{font-size:11px;color:#aeaeb2;margin-top:10px;line-height:1.6}
-.calc-btn{display:block;margin:16px auto 0;padding:12px 40px;background:#F5C842;color:#1c1200;border:none;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;transition:background .15s,transform .1s}
+.calc-btn{display:block;margin:16px auto 0;padding:12px 40px;background:#F5C842;color:#1c1200;border:none;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;transition:background .15s,transform .1s;font-family:inherit}
 .calc-btn:active{background:#e0b530;transform:scale(.97)}
-.close-btn{display:block;width:100%;margin-top:14px;padding:13px;background:#1c1c1e;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center}
+.close-btn{display:block;width:100%;margin-top:14px;padding:13px;background:#1c1c1e;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;font-family:inherit}
 .close-btn:disabled{background:#8e8e93;cursor:not-allowed}
-.rst-btn{display:block;margin:10px auto 0;padding:9px 28px;background:transparent;color:#8e8e93;border:1.5px solid #e5e5ea;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer}
+.rst-btn{display:block;margin:10px auto 0;padding:9px 28px;background:transparent;color:#8e8e93;border:1.5px solid #e5e5ea;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .saving{font-size:12px;color:#8e8e93;text-align:center;margin-top:8px}
+.hidden{display:none}
 </style>
 </head>
 <body>
@@ -64,21 +85,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
   <div class="top-sub">Попередній розрахунок вартості вашого проєкту</div>
 </div>
 <div class="content">
-<div class="lbl">Тип бота</div>
+
+<div class="lbl">Де робимо бота</div>
+<div class="seg">
+  <button id="segIg" class="on" onclick="setPlatform('ig')">instagram</button>
+  <button id="segTg" onclick="setPlatform('tg')">telegram</button>
+</div>
+
+<div class="lbl" id="typeLbl">Можливості</div>
 <div id="sv"></div>
+
 <div class="lbl">Додаткові опції</div>
 <div class="extras-bg"><div id="ex"></div></div>
+
 <div class="lbl">Бонус — завжди включено</div>
 <div class="bonus-box">
   <div class="bonus-title">Технічна підтримка</div>
   <div class="bonus-desc">Залишаюся з вами після здачі бота. Завжди на зв'язку — допоможу вирішити будь-яке питання. Не залишаю вас наодинці.</div>
 </div>
+
 <div class="disclaimer">
-  <p><strong>Це попередній розрахунок.</strong> Фінальна вартість узгоджується індивідуально — все залежить від складності і ваших задач. Ціна може бути як меншою, так і більшою. Розповім детально до початку роботи.</p>
+  <p><strong>Кожен проєкт унікальний.</strong> Усі ціни «від» — це орієнтир. Найкраще спершу розповісти вашу задачу, і вже під неї я підберу рішення. Ціна залежить від обсягу, кількості повторюваних дій та інших деталей. Точну вартість скажу після короткого обговорення.</p>
 </div>
+
 <div class="res" id="res">
   <div class="rl">Попередня вартість від</div>
-  <div class="rp" id="rp">0<span>грн</span></div>
+  <div class="rp" id="rp">0<span>€</span></div>
   <div class="bd" id="bd"></div>
   <div class="rn">Це орієнтовна сума. Точну вартість обговоримо разом — ціна може змінитись залежно від вашого проєкту.</div>
   <button class="close-btn" id="closeBtn" onclick="saveAndClose()">Зберегти розрахунок</button>
@@ -87,56 +119,86 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 <button class="calc-btn" onclick="calc()">Порахувати</button>
 <button class="rst-btn" onclick="rst()">Скинути</button>
 </div>
+
 <script>
 var SCRIPT_URL='https://script.google.com/macros/s/AKfycbwdk840-cj3HDiN9ZWD7zqTKWYbFo7UJM_8of7e5O7aVtojjbbp2VXhbDYRHNVayLjK/exec';
 var tg=window.Telegram&&window.Telegram.WebApp;
 if(tg)tg.expand();
-var SV=[
-  {id:'base',name:'Бот-база',base:2000,desc:'Основа під будь-яку задачу. Оберіть опції і зберіть свій бот під конкретну мету.',tip:'Підходить якщо потрібна одна конкретна функція: тест, рулетка, тригер або проста автоматизація'},
-  {id:'ig_lead',name:'Лід-магніт в Instagram',base:2000,desc:'Видача подарунку або корисного матеріалу в обмін на дію. Включає 1 тригер.',tip:'Людина пише слово або реагує на сторіз — отримує подарунок автоматично.'},
-  {id:'funnel',name:'Воронка лід-магнітна',base:3000,desc:'Збір лідів + прогрів + перехід у Telegram або до покупки.',tip:'Повна автоворонка: лід-магніт, серія прогрівних повідомлень, продаж або перехід у Telegram'},
-  {id:'card',name:'Бот-візитка',base:5000,desc:'Презентація вас або вашого бізнесу з кнопками і корисним контентом.',tip:'Замінює сайт — клієнт дізнається про вас і ваші послуги прямо в Telegram'},
-  {id:'catalog',name:'Каталог',base:5000,desc:'Товари або послуги з описами, фото і цінами.',tip:'Клієнт сам переглядає і обирає — як міні-магазин у Telegram'},
-  {id:'course',name:'Бот-курс',base:6000,desc:'Навчальні матеріали, уроки, домашні завдання, тести.',tip:'Для експертів і коучів — видає контент автоматично по кроках'},
-];
+
+/* ---- ТИПИ (окремі можливості) ---- */
+var TYPES={
+  ig:[
+    {id:'ig_funnel',name:'Автоворонка з подарунком',base:100,desc:'Людина реагує будь-як — бот пише в директ і видає подарунок.',tip:'Включає всі тригери: і слово в коментарях, і реакція на сторіс.'},
+    {id:'ig_faq',name:'Автовідповідач на часті питання',base:60,desc:'Бот сам відповідає на типові питання і розвантажує директ.',tip:''},
+    {id:'ig_menu',name:'Меню послуг у діректі',base:50,desc:'Людина заходить і бачить усі ваші послуги кнопками.',tip:''},
+    {id:'ig_lead',name:'Збір заявок і запис на послугу',base:60,desc:'Бот приймає заявку і записує людину.',tip:''},
+    {id:'ig_quiz',name:'Тест 3–5 питань',base:50,desc:'Кілька простих питань — бот підбирає людині потрібну послугу.',tip:''},
+    {id:'ig_wheel',name:'Рулетка',base:110,desc:'Крутиться гіф-колесо, людині випадає приз чи знижка.',tip:'Гарно залучає і піднімає настрій — добре під акцію.'},
+    {id:'ig_catalog',name:'Каталог товарів чи послуг',base:150,desc:'Товари або послуги з описами, фото і цінами.',tip:'Клієнт сам переглядає і обирає — як міні-вітрина.'}
+  ],
+  tg:[
+    {id:'tg_card',name:'Бот-візитка з меню',base:200,desc:'Презентація вас або бізнесу з кнопками і корисним контентом.',tip:'Замінює сайт — усе про вас прямо в telegram.'},
+    {id:'tg_funnel',name:'Лід-магнітна воронка',base:150,desc:'Людина заходить, отримує подарунок і знайомиться з послугами.',tip:''},
+    {id:'tg_course',name:'Курс у боті',base:200,desc:'Уроки, матеріали, часті питання, нагадування-супровід, збір відгуків.',tip:'Для експертів і коучів — видає навчання по кроках.'},
+    {id:'tg_catalog',name:'Каталог товарів чи послуг',base:150,desc:'Товари або послуги з описами, фото і цінами.',tip:'Клієнт сам переглядає і обирає — як міні-магазин у telegram.'},
+    {id:'tg_mini',name:'Telegram mini app',base:200,desc:'Міні-застосунок прямо в боті: калькулятор, каталог, особистий кабінет.',tip:'Складніша інтерактивна штука під вашу задачу.'}
+  ]
+};
+
+/* ---- ДОДАТКОВІ ОПЦІЇ (спільні) ---- */
 var EX=[
-  {id:'design',label:'Дизайн у Canva / макет',price:500,hint:'Оформлення карток, банерів, шаблонів для бота'},
-  {id:'copy',label:'Написання текстів',price:700,hint:''},
-  {id:'google',label:'Інтеграція з Google Таблицями',price:1000,hint:'Автозбір заявок, статистика, CRM у таблиці'},
-  {id:'payment',label:'Оплата в боті',price:1000,hint:'Налаштування кнопок оплати, WayForPay, логіка після оплати'},
-  {id:'triggers',label:'Тригери та автоматизація',price:500,hint:'Реакція на слово, коментар, сторіз.'},
-  {id:'game',label:'Тест / рулетка / гейміфікація',price:1500,hint:'Квіз, карта дня, розіграш — будь-яка інтерактивна механіка'},
+  {id:'broadcast',label:'Розсилка по базі',price:30,hint:'Повідомлення вашим підписникам: акції, новини, нагадування'},
+  {id:'design',label:'Дизайн картинок',price:40,hint:'Оформлення карток, банерів, меню у вашому стилі'},
+  {id:'copy',label:'Тексти під ключ',price:50,hint:'Напишу тексти для бота, якщо не хочете самі'},
+  {id:'google',label:'Інтеграція з Google Таблицями',price:30,hint:'Автозбір заявок і статистика у таблиці'},
+  {id:'payment',label:'Оплата в боті',price:40,hint:'Кнопки оплати, WayForPay, логіка після оплати'}
 ];
-var sel=null,chk={},calcTotal=0;
-function rs(){
-  document.getElementById('sv').innerHTML=SV.map(function(s){
-    var on=sel===s.id;
-    return '<div class="scard'+(on?' on':'')+'" onclick="ss(\''+s.id+'\')">'+(on?'<div class="badge-hl">Обрано</div>':'')+'<div class="ch"><span class="ct">'+s.name+'</span><span class="cp">від '+s.base.toLocaleString('uk-UA')+' грн</span></div><div class="cd">'+s.desc+'</div>'+(on?'<div class="tip">'+s.tip+'</div>':'')+'</div>';
-  }).join('');
+
+var platform='ig';
+var selType=null,chk={},calcTotal=0;
+
+function setPlatform(p){
+  if(platform===p)return;
+  platform=p;
+  document.getElementById('segIg').classList.toggle('on',p==='ig');
+  document.getElementById('segTg').classList.toggle('on',p==='tg');
+  selType=null;
+  document.getElementById('res').style.display='none';
+  render();
 }
-function re(){
+
+function render(){
+  // можливості
+  document.getElementById('sv').innerHTML=TYPES[platform].map(function(s){
+    var on=selType===s.id;
+    return '<div class="scard'+(on?' on':'')+'" onclick="ss(\''+s.id+'\')">'+(on?'<div class="badge-hl">Обрано</div>':'')+'<div class="ch"><span class="ct">'+s.name+'</span><span class="cp">від '+s.base+' €</span></div><div class="cd">'+s.desc+'</div>'+(on&&s.tip?'<div class="tip">'+s.tip+'</div>':'')+'</div>';
+  }).join('');
+  // опції
   document.getElementById('ex').innerHTML=EX.map(function(e){
     var c=chk[e.id];
-    return '<div class="ei'+(c?' on':'')+'" onclick="te(\''+e.id+'\')">'+'<div class="round-cb'+(c?' checked':'')+'"></div>'+'<div class="ei-info"><div class="en">'+e.label+'</div><div class="ep">від '+e.price.toLocaleString('uk-UA')+' грн</div>'+(e.hint?'<div class="ehint">'+e.hint+'</div>':'')+'</div></div>';
+    return '<div class="ei'+(c?' on':'')+'" onclick="te(\''+e.id+'\')"><div class="round-cb'+(c?' checked':'')+'"></div><div class="ei-info"><div class="en">'+e.label+'</div><div class="ep">від '+e.price+' €</div>'+(e.hint?'<div class="ehint">'+e.hint+'</div>':'')+'</div></div>';
   }).join('');
 }
-function ss(id){sel=id;rs();}
-function te(id){chk[id]=!chk[id];re();}
+
+function ss(id){selType=(selType===id?null:id);render();}
+function te(id){chk[id]=!chk[id];render();}
+
 function calc(){
-  if(!sel){alert('Оберіть тип бота');return;}
-  var s=SV.find(function(x){return x.id===sel;});
-  calcTotal=s.base;
-  var rows='<div class="br"><span>'+s.name+'</span><span>від '+s.base.toLocaleString('uk-UA')+' грн</span></div>';
-  EX.forEach(function(e){if(chk[e.id]){calcTotal+=e.price;rows+='<div class="br"><span>+ '+e.label+'</span><span>від '+e.price.toLocaleString('uk-UA')+' грн</span></div>';}});
-  rows+='<div class="br tot"><span>Разом</span><span>від '+calcTotal.toLocaleString('uk-UA')+' грн</span></div>';
-  document.getElementById('rp').innerHTML=calcTotal.toLocaleString('uk-UA')+'<span>грн</span>';
+  var chosen=TYPES[platform].find(function(x){return x.id===selType;});
+  if(!chosen){alert('Оберіть можливість');return;}
+  calcTotal=chosen.base;
+  var rows='<div class="br"><span>'+chosen.name+'</span><span>від '+chosen.base+' €</span></div>';
+  EX.forEach(function(e){if(chk[e.id]){calcTotal+=e.price;rows+='<div class="br"><span>+ '+e.label+'</span><span>від '+e.price+' €</span></div>';}});
+  rows+='<div class="br tot"><span>Разом</span><span>від '+calcTotal+' €</span></div>';
+  document.getElementById('rp').innerHTML=calcTotal+'<span>€</span>';
   document.getElementById('bd').innerHTML=rows;
   document.getElementById('res').style.display='block';
   document.getElementById('res').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+
 async function saveAndClose(){
-  if(!sel)return;
-  var s=SV.find(function(x){return x.id===sel;});
+  var chosen=TYPES[platform].find(function(x){return x.id===selType;});
+  if(!chosen)return;
   var extras=[];
   EX.forEach(function(e){if(chk[e.id])extras.push(e.label);});
   var btn=document.getElementById('closeBtn');
@@ -144,6 +206,7 @@ async function saveAndClose(){
   btn.disabled=true;
   txt.textContent='Зберігаємо...';
   var user=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:{};
+  var pfLabel=platform==='ig'?'Instagram':'Telegram';
   try{
     await fetch(SCRIPT_URL,{
       method:'POST',
@@ -153,9 +216,9 @@ async function saveAndClose(){
         user_id:user.id?String(user.id):'невідомо',
         first_name:user.first_name||'',
         username:user.username||'',
-        project:s.name,
+        project:pfLabel+': '+chosen.name,
         options:extras.join(', ')||'без додаткових опцій',
-        price:'від '+calcTotal.toLocaleString('uk-UA')+' грн'
+        price:'від '+calcTotal+' €'
       })
     });
     txt.textContent='Збережено!';
@@ -165,8 +228,10 @@ async function saveAndClose(){
     btn.disabled=false;
   }
 }
-function rst(){sel=null;chk={};calcTotal=0;rs();re();document.getElementById('res').style.display='none';}
-rs();re();
+
+function rst(){selType=null;chk={};calcTotal=0;render();document.getElementById('res').style.display='none';}
+
+render();
 </script>
 </body>
 </html>
